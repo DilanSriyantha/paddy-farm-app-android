@@ -1,0 +1,44 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.PaddyFarm" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="colorPrimary">@color/primary</item>
+
+        <item name="materialButtonStyle">@style/CustomButtonStyle</item>
+
+        <item name="textInputStyle">@style/CustomTextInputStyle</item>
+    </style>
+
+    <style name="DefaultButtonShape" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="DefaultTextInputLayoutShape" parent="ShapeAppearance.Material3.Corner.Medium">
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="CustomButtonStyle" parent="Widget.Material3.Button">
+        <item name="shapeAppearanceOverlay">@style/DefaultButtonShape</item>
+
+        <item name="android:textSize">16sp</item>
+
+        <item name="android:padding">18dp</item>
+    </style>
+
+    <style name="CustomTextInputStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="startIconTint">?attr/colorPrimary</item>
+        <item name="endIconTint">?attr/colorPrimary</item>
+        <item name="hintEnabled">true</item>
+        <item name="shapeAppearanceOverlay">@style/DefaultTextInputLayoutShape</item>
+    </style>
+
+    <style name="CustomDropdownStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="shapeAppearanceOverlay">@style/DefaultTextInputLayoutShape</item>
+        <item name="startIconTint">?attr/colorPrimary</item>
+        <item name="endIconTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Theme.PaddyFarm" parent="Base.Theme.PaddyFarm" />
+</resources>

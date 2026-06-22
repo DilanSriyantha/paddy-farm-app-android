@@ -1,0 +1,91 @@
+package com.dtechsolutions.paddyfarm.ui.profile;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.dtechsolutions.paddyfarm.R;
+import com.dtechsolutions.paddyfarm.data.models.User;
+import com.dtechsolutions.paddyfarm.ui.dashboard.DashboardActivity;
+import com.dtechsolutions.paddyfarm.utils.Resource;
+
+import java.util.Objects;
+
+public class ProfileActivity extends AppCompatActivity {
+    TextView txtActionBarTitle;
+    ImageButton btnBack;
+    TextView txtUserName, txtPhoneNumber, txtEmail, txtPreferredLanguage;
+
+    private ProfileViewModel viewModel;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_profile);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        initialize();
+    }
+
+    private void initialize() {
+        this.txtActionBarTitle = findViewById(R.id.txtActionBarTitle);
+        txtActionBarTitle.setText(R.string.profile);
+
+        this.btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(this::handleBackClick);
+
+        txtUserName = findViewById(R.id.txtUsername);
+        txtPhoneNumber = findViewById(R.id.txtPhoneNumber);
+        txtEmail = findViewById(R.id.txtEmail);
+        txtPreferredLanguage = findViewById(R.id.txtPreferredLanguage);
+
+        viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        observeProfile();
+    }
+
+    private void handleBackClick(View view) {
+        Intent i = new Intent(ProfileActivity.this, DashboardActivity.class);
+        startActivity(i);
+
+        finish();
+    }
+
+    private void observeProfile() {
+        viewModel.fetchProfile();
+        viewModel
+                .getProfile()
+                .observe(this, this::onProfileLoaded);
+    }
+
+    private void onProfileLoaded(Resource<User> profileResult) {
+        switch (profileResult.status) {
+            case SUCCESS:
+                updateProfileCard(profileResult.data);
+                break;
+
+            case ERROR:
+                break;
+        }
+    }
+
+    private void updateProfileCard(User profile) {
+        Objects.requireNonNull(txtUserName).setText(profile.getName());
+        Objects.requireNonNull(txtPhoneNumber).setText(profile.getPhoneNumber());
+        Objects.requireNonNull(txtEmail).setText(profile.getEmail());
+        Objects.requireNonNull(txtPreferredLanguage).setText(profile.getPreferredLanguage().name());
+    }
+}
