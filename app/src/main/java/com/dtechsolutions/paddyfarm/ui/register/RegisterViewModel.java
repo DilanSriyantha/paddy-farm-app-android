@@ -8,10 +8,12 @@ import com.dtechsolutions.paddyfarm.MyApplication;
 import com.dtechsolutions.paddyfarm.data.models.AuthResponse;
 import com.dtechsolutions.paddyfarm.data.repositories.AuthRepository;
 import com.dtechsolutions.paddyfarm.enums.PreferredLanguage;
+import com.dtechsolutions.paddyfarm.utils.AlertEvent;
+import com.dtechsolutions.paddyfarm.utils.BaseViewModel;
 import com.dtechsolutions.paddyfarm.utils.Resource;
 import com.dtechsolutions.paddyfarm.utils.TokenProvider.SharedPrefsTokenProvider;
 
-public class RegisterViewModel extends ViewModel {
+public class RegisterViewModel extends BaseViewModel {
     private final AuthRepository repository;
     private final MutableLiveData<Resource<AuthResponse>> registerResult = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isRegistering = new MutableLiveData<>(false);
@@ -23,11 +25,12 @@ public class RegisterViewModel extends ViewModel {
     public void register(
             String name,
             String email,
+            String phoneNumber,
             String password,
             PreferredLanguage preferredLanguage
     ) {
         repository
-                .register(name, email, password, preferredLanguage)
+                .register(name, email, password, phoneNumber, preferredLanguage)
                 .observeForever(this::updateRegisterResult);
     }
 
@@ -49,7 +52,15 @@ public class RegisterViewModel extends ViewModel {
             isRegistering.setValue(false);
         }
 
-        if(authResponse.status == Resource.Status.ERROR) isRegistering.setValue(false);
+        if(authResponse.status == Resource.Status.ERROR) {
+            alertEvent.setValue(new AlertEvent(
+                    AlertEvent.Type.ERROR,
+                    "Error",
+                    "Failed to register your profile. Please try again later."
+            ));
+
+            isRegistering.setValue(false);
+        }
 
         registerResult.postValue(authResponse);
     }

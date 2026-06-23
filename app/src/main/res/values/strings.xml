@@ -96,4 +96,8 @@
     <string name="early_detection">Early detection, better protection</string>
     <string name="early_detection_description">Detecting diseases early helps in taking timely actions and prevents crop yield loss.</string>
     <string name="scan_now">Scan Now</string>
+    <string name="error">Error</string>
+    <string name="success">Success</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="alert_placeholder">Alert placeholder</string>
 </resources>

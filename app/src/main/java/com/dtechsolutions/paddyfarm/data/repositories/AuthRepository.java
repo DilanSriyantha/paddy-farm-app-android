@@ -49,6 +49,7 @@ public class AuthRepository {
     public LiveData<Resource<AuthResponse>> register(
             String name,
             String email,
+            String phoneNumber,
             String password,
             PreferredLanguage preferredLanguage
     ) {
@@ -56,7 +57,7 @@ public class AuthRepository {
         result.setValue(Resource.loading());
 
         apiService.register(
-                new RegisterRequest(name, email, password, preferredLanguage)
+                new RegisterRequest(name, email, password, phoneNumber, preferredLanguage)
         ).enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {

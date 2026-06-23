@@ -5,12 +5,14 @@ import com.dtechsolutions.paddyfarm.enums.PreferredLanguage;
 public class RegisterRequest {
     private String name;
     private String email;
+    private String phoneNumber;
     private String password;
     private PreferredLanguage preferredLanguage;
 
-    public RegisterRequest(String name, String email, String password, PreferredLanguage preferredLanguage) {
+    public RegisterRequest(String name, String email, String phoneNumber, String password, PreferredLanguage preferredLanguage) {
         this.name = name;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.password = password;
         this.preferredLanguage = preferredLanguage;
     }
@@ -29,6 +31,14 @@ public class RegisterRequest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getPassword() {

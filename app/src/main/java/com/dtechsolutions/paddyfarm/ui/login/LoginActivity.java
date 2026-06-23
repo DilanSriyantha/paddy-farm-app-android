@@ -17,18 +17,24 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dtechsolutions.paddyfarm.R;
 import com.dtechsolutions.paddyfarm.ui.register.RegisterActivity;
 import com.dtechsolutions.paddyfarm.ui.dashboard.DashboardActivity;
+import com.dtechsolutions.paddyfarm.utils.AlertEvent;
+import com.dtechsolutions.paddyfarm.utils.AlertManager;
+import com.dtechsolutions.paddyfarm.utils.BaseActivity;
 import com.dtechsolutions.paddyfarm.utils.PreferenceManager;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Objects;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity<LoginViewModel> {
 
     TextInputEditText txtEmail, txtPassword;
     Button btnLogin, btnRegister;
     ProgressBar pbLoginLoading;
 
-    private LoginViewModel viewModel;
+    @Override
+    protected Class<LoginViewModel> getViewModelClass() {
+        return LoginViewModel.class;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +61,6 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(this::handleRegisterClick);
 
         pbLoginLoading = findViewById(R.id.pbLoginLoading);
-
-        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         observeAuthResponse();
         observeIsLoggingIn();

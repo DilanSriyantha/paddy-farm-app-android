@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primary">#297701</color>
+    <color name="primary_light">#80297701</color>
     <color name="primary_surface">#33297701</color>
     <color name="primary_surface_light">#1A297701</color>
     <color name="red">#FF3333</color>

@@ -25,7 +25,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dtechsolutions.paddyfarm.R;
 import com.dtechsolutions.paddyfarm.enums.PreferredLanguage;
+import com.dtechsolutions.paddyfarm.ui.dashboard.DashboardActivity;
 import com.dtechsolutions.paddyfarm.ui.login.LoginActivity;
+import com.dtechsolutions.paddyfarm.utils.BaseActivity;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -33,7 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity<RegisterViewModel> {
 
     TextView lblLoginRedirect;
     TextInputEditText txtName, txtEmail, txtPhoneNumber, txtPassword, txtConfirmPassword;
@@ -41,7 +43,10 @@ public class RegisterActivity extends AppCompatActivity {
     Button btnRegister;
     ProgressBar pbRegisterLoading;
 
-    private RegisterViewModel viewModel;
+    @Override
+    protected Class<RegisterViewModel> getViewModelClass() {
+        return RegisterViewModel.class;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +76,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         initializeAutoCompletePreferredLanguage();
         initializeLoginRedirect();
-
-        viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
         observeAuthResponse();
         observeIsRegistering();
@@ -160,13 +163,31 @@ public class RegisterActivity extends AppCompatActivity {
         viewModel.register(
                 name,
                 email,
+                phone,
                 password1,
                 preferredLanguage
         );
     }
 
     private void processSuccessfulRegistration() {
-        Toast.makeText(this, "Successful", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show();
+        cleanInputs();
+        goToDashboard();
+    }
+
+    private void cleanInputs() {
+        txtName.setText("");
+        txtEmail.setText("");
+        txtPhoneNumber.setText("");
+        txtPassword.setText("");
+        txtConfirmPassword.setText("");
+    }
+
+    private void goToDashboard() {
+        Intent i = new Intent(RegisterActivity.this, DashboardActivity.class);
+        startActivity(i);
+
+        finish();
     }
 
     private void observeAuthResponse() {

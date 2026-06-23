@@ -1,5 +1,7 @@
 package com.dtechsolutions.paddyfarm.ui.login;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -7,10 +9,12 @@ import androidx.lifecycle.ViewModel;
 import com.dtechsolutions.paddyfarm.MyApplication;
 import com.dtechsolutions.paddyfarm.data.models.AuthResponse;
 import com.dtechsolutions.paddyfarm.data.repositories.AuthRepository;
+import com.dtechsolutions.paddyfarm.utils.AlertEvent;
+import com.dtechsolutions.paddyfarm.utils.BaseViewModel;
 import com.dtechsolutions.paddyfarm.utils.Resource;
 import com.dtechsolutions.paddyfarm.utils.TokenProvider.SharedPrefsTokenProvider;
 
-public class LoginViewModel extends ViewModel {
+public class LoginViewModel extends BaseViewModel {
     private final AuthRepository repository;
     private final MutableLiveData<Resource<AuthResponse>> loginResult = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoggingIn = new MutableLiveData<>(false);
@@ -43,7 +47,17 @@ public class LoginViewModel extends ViewModel {
             isLoggingIn.setValue(false);
         }
 
-        if(authResponse.status == Resource.Status.ERROR) isLoggingIn.setValue(false);
+        if(authResponse.status == Resource.Status.ERROR) {
+            Log.d("LoginViewModel", "authResponse error " + authResponse.message);
+
+            alertEvent.setValue(new AlertEvent(
+                    AlertEvent.Type.ERROR,
+                    null,
+                    "Failed to authenticate! Please try again later."
+            ));
+
+            isLoggingIn.setValue(false);
+        };
 
         loginResult.setValue(authResponse);
     }

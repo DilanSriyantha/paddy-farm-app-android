@@ -105,6 +105,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
                 android:orientation="vertical"
+                android:gravity="center_horizontal"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -254,15 +255,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="10dp"/>
 
-                <TextView
-                    android:id="@+id/lblLoginRedirect"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:text="@string/login_redirect_spannable_text_here"/>
+                    android:background="@drawable/bg_rect_round_corner_transparent"
+                    android:backgroundTint="@color/primary_light">
 
+                    <TextView
+                        android:id="@+id/lblLoginRedirect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:text="@string/login_redirect_spannable_text_here"/>
+                </LinearLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
