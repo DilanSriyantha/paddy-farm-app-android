@@ -19,8 +19,19 @@
         <include layout="@layout/custom_appbar" />
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/pbProfile"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:indeterminateTint="@color/primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout1" />
+
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/profileContainer"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

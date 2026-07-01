@@ -176,11 +176,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/btnSaveSession"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/baseline_save_24"
-            android:text="@string/save_session" />
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btnSaveSession"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/save_session"
+                android:drawableEnd="@drawable/baseline_save_24"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <ProgressBar
+                android:id="@+id/pbSaveSessionLoading"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:visibility="gone"
+                android:indeterminateTint="@android:color/white"
+                app:layout_constraintTop_toTopOf="@id/btnSaveSession"
+                app:layout_constraintBottom_toBottomOf="@id/btnSaveSession"
+                app:layout_constraintLeft_toLeftOf="@id/btnSaveSession"
+                app:layout_constraintRight_toRightOf="@id/btnSaveSession" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

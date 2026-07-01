@@ -36,7 +36,7 @@ public class UsersRepository {
 
             @Override
             public void onFailure(Call<User> call, Throwable throwable) {
-                result.setValue(Resource.error(throwable.getMessage()));
+                result.postValue(Resource.error(throwable.getMessage()));
             }
         });
 

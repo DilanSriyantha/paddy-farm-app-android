@@ -16,19 +16,15 @@ import com.dtechsolutions.paddyfarm.utils.TokenProvider.SharedPrefsTokenProvider
 
 public class LoginViewModel extends BaseViewModel {
     private final AuthRepository repository;
-    private final MutableLiveData<Resource<AuthResponse>> loginResult = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> isLoggingIn = new MutableLiveData<>(false);
+    private final MutableLiveData<Resource<AuthResponse>> result;
 
     public LoginViewModel() {
         repository = new AuthRepository();
+        result = new MutableLiveData<>();
     }
 
     public LiveData<Resource<AuthResponse>> getLoginResult() {
-        return loginResult;
-    }
-
-    public LiveData<Boolean> getIsLoggingIn() {
-        return isLoggingIn;
+        return result;
     }
 
     public void login(String email, String password) {
@@ -38,27 +34,11 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     private void updateLoginResult(Resource<AuthResponse> authResponse) {
-        if(authResponse.status == Resource.Status.LOADING) isLoggingIn.setValue(true);
-
-        if(authResponse.status == Resource.Status.SUCCESS){
+        if(authResponse.status == Resource.Status.SUCCESS) {
             SharedPrefsTokenProvider tokenProvider = (SharedPrefsTokenProvider) MyApplication.getTokenProvider();
             tokenProvider.saveToken(authResponse.data.getAccessToken());
-
-            isLoggingIn.setValue(false);
         }
 
-        if(authResponse.status == Resource.Status.ERROR) {
-            Log.d("LoginViewModel", "authResponse error " + authResponse.message);
-
-            alertEvent.setValue(new AlertEvent(
-                    AlertEvent.Type.ERROR,
-                    null,
-                    "Failed to authenticate! Please try again later."
-            ));
-
-            isLoggingIn.setValue(false);
-        };
-
-        loginResult.setValue(authResponse);
+        result.setValue(authResponse);
     }
 }

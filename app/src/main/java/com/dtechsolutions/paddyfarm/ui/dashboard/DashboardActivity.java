@@ -3,6 +3,9 @@ package com.dtechsolutions.paddyfarm.ui.dashboard;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -10,9 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dtechsolutions.paddyfarm.R;
+import com.dtechsolutions.paddyfarm.data.models.RecommendationSummary;
 import com.dtechsolutions.paddyfarm.data.models.User;
 import com.dtechsolutions.paddyfarm.ui.diseasedetection.DiseaseDetectionActivity;
 import com.dtechsolutions.paddyfarm.ui.fertilizerprices.FertilizerPricesActivity;
@@ -21,6 +26,8 @@ import com.dtechsolutions.paddyfarm.ui.profile.ProfileViewModel;
 import com.dtechsolutions.paddyfarm.ui.recommendations.RecommendationsActivity;
 import com.dtechsolutions.paddyfarm.ui.startcultivation.StartCultivationActivity;
 import com.dtechsolutions.paddyfarm.ui.chatbot.ChatbotActivity;
+import com.dtechsolutions.paddyfarm.utils.AlertEvent;
+import com.dtechsolutions.paddyfarm.utils.BaseActivity;
 import com.dtechsolutions.paddyfarm.utils.Resource;
 import com.google.android.material.card.MaterialCardView;
 
@@ -29,12 +36,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends BaseActivity<DashboardViewModel> {
     MaterialCardView btnStartCultivation, btnRecommendations, btnAiChatbot,
     btnDiseaseDetection, btnFertilizerPrices, btnProfile;
-    TextView txtGreeting, txtUsername;
+    TextView txtGreeting, txtUsername, txtStage, txtDaysGone;
+    ImageView imgPlant;
+    LinearLayout summaryContainer;
+    ProgressBar pbSummary;
 
-    private ProfileViewModel profileViewModel;
+    @Override
+    protected Class<DashboardViewModel> getViewModelClass() {
+        return DashboardViewModel.class;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +61,8 @@ public class DashboardActivity extends AppCompatActivity {
         });
 
         initialize();
+        observeProfile();
+        observeSummary();
     }
 
     private void initialize() {
@@ -72,8 +87,12 @@ public class DashboardActivity extends AppCompatActivity {
         txtGreeting = findViewById(R.id.txtGreeting);
         txtUsername = findViewById(R.id.txtUsername);
 
-        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        observeProfile();
+        txtStage = findViewById(R.id.txtStage);
+        txtDaysGone = findViewById(R.id.txtDaysGone);
+
+        summaryContainer = findViewById(R.id.summaryContainer);
+        imgPlant = findViewById(R.id.imgPlant);
+        pbSummary = findViewById(R.id.pbSummaryCard);
     }
 
     private void handleStartCultivationClick(View view) {
@@ -106,25 +125,6 @@ public class DashboardActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    private void observeProfile() {
-        profileViewModel.fetchProfile();
-        profileViewModel
-                .getProfile()
-                .observe(this, this::onProfileLoaded);
-    }
-
-    private void onProfileLoaded(Resource<User> profileResult) {
-        switch (profileResult.status) {
-            case SUCCESS:
-                Objects.requireNonNull(txtGreeting).setText(getGreeting());
-                Objects.requireNonNull(txtUsername).setText(profileResult.data.getName());
-                break;
-
-            case ERROR:
-                break;
-        }
-    }
-
     private String getGreeting() {
         Date currentDate = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -141,5 +141,70 @@ public class DashboardActivity extends AppCompatActivity {
         }else{
             return "Good Night,";
         }
+    }
+
+    private void updateSummaryCard(RecommendationSummary summary) {
+        txtStage.setText(summary.getStage().getTitle());
+
+        String daysGone = "Day " + (summary.getDaysGone());
+        txtDaysGone.setText(daysGone);
+    }
+
+    private void startSummaryLoading() {
+        pbSummary.setVisibility(View.VISIBLE);
+        imgPlant.setVisibility(View.INVISIBLE);
+        summaryContainer.setVisibility(View.GONE);
+    }
+
+    private void stopSummaryLoading() {
+        pbSummary.setVisibility(View.GONE);
+        imgPlant.setVisibility(View.VISIBLE);
+        summaryContainer.setVisibility(View.VISIBLE);
+    }
+
+    private void observeProfile() {
+        ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        profileViewModel.fetchProfile();
+        profileViewModel.getProfile().observe(this, new Observer<Resource<User>>() {
+            @Override
+            public void onChanged(Resource<User> result) {
+                switch (result.status) {
+                    case SUCCESS:
+                        Objects.requireNonNull(txtGreeting).setText(getGreeting());
+                        Objects.requireNonNull(txtUsername).setText(result.data.getName());
+                        break;
+
+                    case ERROR:
+                        break;
+                }
+            }
+        });
+    }
+
+    private void observeSummary() {
+        viewModel.fetchSummary();
+        viewModel.getResult().observe(this, new Observer<Resource<RecommendationSummary>>() {
+            @Override
+            public void onChanged(Resource<RecommendationSummary> result) {
+                switch (result.status) {
+                    case LOADING:
+                        startSummaryLoading();
+                        break;
+
+                    case SUCCESS:
+                        updateSummaryCard(result.data);
+                        stopSummaryLoading();
+                        break;
+
+                    case ERROR:
+                        viewModel.addAlertEvent(new AlertEvent(
+                                AlertEvent.Type.ERROR,
+                                null,
+                                "Failed to fetch session summary."
+                        ));
+                        break;
+                }
+            }
+        });
     }
 }

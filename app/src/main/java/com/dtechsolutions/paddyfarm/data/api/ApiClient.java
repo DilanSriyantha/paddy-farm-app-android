@@ -9,6 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     private static ApiService apiService;
+    public final static String baseUrl = "http://10.0.2.2:3000/";
 
     public static ApiService getInstance(TokenProvider tokenProvider) {
         if (apiService == null) {
@@ -21,7 +22,7 @@ public class ApiClient {
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:3000/")
+                    .baseUrl(baseUrl)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

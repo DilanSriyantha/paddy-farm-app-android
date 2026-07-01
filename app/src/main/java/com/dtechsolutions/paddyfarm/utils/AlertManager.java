@@ -35,7 +35,7 @@ public class AlertManager {
                 .show();
     }
 
-    public static void showSuccess(Context context, String message, String title, DialogInterface.OnClickListener onConfirm) {
+    public static void showSuccess(Context context, String title, String message, DialogInterface.OnClickListener onConfirm) {
         new MaterialAlertDialogBuilder(context)
                 .setTitle(title)
                 .setMessage(message)

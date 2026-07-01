@@ -10,4 +10,8 @@ public class BaseViewModel extends ViewModel {
     public LiveData<AlertEvent> getAlertEvent() {
         return alertEvent;
     }
+
+    public void addAlertEvent(AlertEvent alertEvent) {
+        this.alertEvent.postValue(alertEvent);
+    }
 }

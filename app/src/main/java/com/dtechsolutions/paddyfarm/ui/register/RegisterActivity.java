@@ -27,6 +27,7 @@ import com.dtechsolutions.paddyfarm.R;
 import com.dtechsolutions.paddyfarm.enums.PreferredLanguage;
 import com.dtechsolutions.paddyfarm.ui.dashboard.DashboardActivity;
 import com.dtechsolutions.paddyfarm.ui.login.LoginActivity;
+import com.dtechsolutions.paddyfarm.utils.AlertEvent;
 import com.dtechsolutions.paddyfarm.utils.BaseActivity;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -78,7 +79,6 @@ public class RegisterActivity extends BaseActivity<RegisterViewModel> {
         initializeLoginRedirect();
 
         observeAuthResponse();
-        observeIsRegistering();
     }
 
     private void initializeAutoCompletePreferredLanguage() {
@@ -98,10 +98,10 @@ public class RegisterActivity extends BaseActivity<RegisterViewModel> {
     private void initializeLoginRedirect() {
         this.lblLoginRedirect = findViewById(R.id.lblLoginRedirect);
 
-        String fullText = "Already have an account? Log in";
+        String fullText = getString(R.string.already_have_an_account);
         SpannableString spannableString = new SpannableString(fullText);
 
-        String clickablePart = "Log in";
+        String clickablePart = getString(R.string.login);
         int startIndex = fullText.indexOf(clickablePart);
         int endIndex = startIndex + clickablePart.length();
 
@@ -190,48 +190,51 @@ public class RegisterActivity extends BaseActivity<RegisterViewModel> {
         finish();
     }
 
+    private void startLoading() {
+        txtName.setEnabled(false);
+        txtEmail.setEnabled(false);
+        txtPhoneNumber.setEnabled(false);
+        txtPassword.setEnabled(false);
+        txtConfirmPassword.setEnabled(false);
+        btnRegister.setEnabled(false);
+        btnRegister.setText("");
+        pbRegisterLoading.setVisibility(View.VISIBLE);
+    }
+
+    private void stopLoading() {
+        txtName.setEnabled(true);
+        txtEmail.setEnabled(true);
+        txtPhoneNumber.setEnabled(true);
+        txtPassword.setEnabled(true);
+        txtConfirmPassword.setEnabled(true);
+        btnRegister.setEnabled(true);
+        btnRegister.setText(R.string.register);
+        pbRegisterLoading.setVisibility(View.GONE);
+    }
+
     private void observeAuthResponse() {
         viewModel.getRegisterResult()
                 .observe(this, result -> {
                     switch (result.status) {
                         case LOADING:
+                            startLoading();
                             break;
 
                         case SUCCESS:
-                            processSuccessfulRegistration();
+                            cleanInputs();
+                            goToDashboard();
+                            stopLoading();
                             break;
 
                         case ERROR:
-                            Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show();
+                            viewModel.addAlertEvent(new AlertEvent(
+                                    AlertEvent.Type.ERROR,
+                                    null,
+                                    "Failed to create a new user\n" + result.message
+                            ));
+                            stopLoading();
                             break;
                     }
                 });
-    }
-
-    private void observeIsRegistering() {
-        viewModel.getIsRegistering()
-                .observe(this, this::setLoading);
-    }
-
-    private void setLoading(boolean flag) {
-        if (flag) {
-            txtName.setEnabled(false);
-            txtEmail.setEnabled(false);
-            txtPhoneNumber.setEnabled(false);
-            txtPassword.setEnabled(false);
-            txtConfirmPassword.setEnabled(false);
-            btnRegister.setEnabled(false);
-            btnRegister.setText("");
-            pbRegisterLoading.setVisibility(View.VISIBLE);
-        }else{
-            txtName.setEnabled(true);
-            txtEmail.setEnabled(true);
-            txtPhoneNumber.setEnabled(true);
-            txtPassword.setEnabled(true);
-            txtConfirmPassword.setEnabled(true);
-            btnRegister.setEnabled(true);
-            btnRegister.setText(R.string.register);
-            pbRegisterLoading.setVisibility(View.GONE);
-        }
     }
 }

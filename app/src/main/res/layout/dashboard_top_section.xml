@@ -90,7 +90,17 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp">
 
+                    <ProgressBar
+                        android:id="@+id/pbSummaryCard"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:indeterminateTint="@color/primary"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"/>
+
                     <LinearLayout
+                        android:id="@+id/summaryContainer"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -105,6 +115,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/txtStage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/stage_placeholder"
@@ -130,6 +141,7 @@
                                 android:src="@drawable/baseline_calendar_month_24" />
 
                             <TextView
+                                android:id="@+id/txtDaysGone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/day_counter_placeholder" />
@@ -137,6 +149,8 @@
                     </LinearLayout>
 
                     <ImageView
+                        android:id="@+id/imgPlant"
+                        android:visibility="invisible"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_alignParentEnd="true"

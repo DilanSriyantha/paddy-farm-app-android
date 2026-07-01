@@ -15,11 +15,11 @@ import com.dtechsolutions.paddyfarm.utils.TokenProvider.SharedPrefsTokenProvider
 
 public class RegisterViewModel extends BaseViewModel {
     private final AuthRepository repository;
-    private final MutableLiveData<Resource<AuthResponse>> registerResult = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> isRegistering = new MutableLiveData<>(false);
+    private final MutableLiveData<Resource<AuthResponse>> result;
 
     public RegisterViewModel() {
         repository = new AuthRepository();
+        result = new MutableLiveData<>();
     }
 
     public void register(
@@ -35,33 +35,15 @@ public class RegisterViewModel extends BaseViewModel {
     }
 
     public LiveData<Resource<AuthResponse>> getRegisterResult() {
-        return registerResult;
-    }
-
-    public LiveData<Boolean> getIsRegistering() {
-        return isRegistering;
+        return result;
     }
 
     private void updateRegisterResult(Resource<AuthResponse> authResponse) {
-        if(authResponse.status == Resource.Status.LOADING) isRegistering.setValue(true);
-
         if(authResponse.status == Resource.Status.SUCCESS) {
             SharedPrefsTokenProvider tokenProvider = (SharedPrefsTokenProvider) MyApplication.getTokenProvider();
             tokenProvider.saveToken(authResponse.data.getAccessToken());
-
-            isRegistering.setValue(false);
         }
 
-        if(authResponse.status == Resource.Status.ERROR) {
-            alertEvent.setValue(new AlertEvent(
-                    AlertEvent.Type.ERROR,
-                    "Error",
-                    "Failed to register your profile. Please try again later."
-            ));
-
-            isRegistering.setValue(false);
-        }
-
-        registerResult.postValue(authResponse);
+        result.postValue(authResponse);
     }
 }

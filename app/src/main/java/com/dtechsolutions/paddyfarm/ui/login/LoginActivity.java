@@ -63,7 +63,6 @@ public class LoginActivity extends BaseActivity<LoginViewModel> {
         pbLoginLoading = findViewById(R.id.pbLoginLoading);
 
         observeAuthResponse();
-        observeIsLoggingIn();
     }
 
     private void handleLoginClick(View view) {
@@ -94,22 +93,22 @@ public class LoginActivity extends BaseActivity<LoginViewModel> {
         finish();
     }
 
-    private void setIsLoading(boolean flag) {
-        if(flag){
-            txtEmail.setEnabled(false);
-            txtPassword.setEnabled(false);
-            btnLogin.setEnabled(false);
-            btnLogin.setText("");
-            btnRegister.setEnabled(false);
-            pbLoginLoading.setVisibility(View.VISIBLE);
-        }else{
-            txtEmail.setEnabled(true);
-            txtPassword.setEnabled(true);
-            btnLogin.setEnabled(true);
-            btnLogin.setText(R.string.login);
-            btnRegister.setEnabled(true);
-            pbLoginLoading.setVisibility(View.GONE);
-        }
+    private void startLoading() {
+        txtEmail.setEnabled(false);
+        txtPassword.setEnabled(false);
+        btnLogin.setEnabled(false);
+        btnLogin.setText("");
+        btnRegister.setEnabled(false);
+        pbLoginLoading.setVisibility(View.VISIBLE);
+    }
+
+    private void stopLoading() {
+        txtEmail.setEnabled(true);
+        txtPassword.setEnabled(true);
+        btnLogin.setEnabled(true);
+        btnLogin.setText(R.string.login);
+        btnRegister.setEnabled(true);
+        pbLoginLoading.setVisibility(View.GONE);
     }
 
     private void observeAuthResponse() {
@@ -117,21 +116,23 @@ public class LoginActivity extends BaseActivity<LoginViewModel> {
                 .observe(this, result -> {
                     switch (result.status) {
                         case LOADING:
+                            startLoading();
                             break;
 
                         case SUCCESS:
                             goToDashboard();
+                            stopLoading();
                             break;
 
                         case ERROR:
-                            Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show();
+                            viewModel.addAlertEvent(new AlertEvent(
+                                    AlertEvent.Type.ERROR,
+                                    null,
+                                    "Failed to log into your account.\n" + result.message
+                            ));
+                            stopLoading();
                             break;
                     }
                 });
-    }
-
-    private void observeIsLoggingIn() {
-        viewModel.getIsLoggingIn()
-                .observe(this, this::setIsLoading);
     }
 }

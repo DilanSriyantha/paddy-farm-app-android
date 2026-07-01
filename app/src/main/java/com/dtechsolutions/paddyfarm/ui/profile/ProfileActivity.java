@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -32,6 +34,8 @@ public class ProfileActivity extends BaseActivity<ProfileViewModel> {
     ImageButton btnBack;
     TextView txtUserName, txtPhoneNumber, txtEmail, txtPreferredLanguage;
     Button btnLogout;
+    ScrollView container;
+    ProgressBar progressbar;
 
     @Override
     protected Class<ProfileViewModel> getViewModelClass() {
@@ -50,6 +54,7 @@ public class ProfileActivity extends BaseActivity<ProfileViewModel> {
         });
 
         initialize();
+        observeProfile();
     }
 
     private void initialize() {
@@ -66,6 +71,9 @@ public class ProfileActivity extends BaseActivity<ProfileViewModel> {
         txtPhoneNumber = findViewById(R.id.txtPhoneNumber);
         txtEmail = findViewById(R.id.txtEmail);
         txtPreferredLanguage = findViewById(R.id.txtPreferredLanguage);
+
+        container = findViewById(R.id.profileContainer);
+        progressbar = findViewById(R.id.pbProfile);
     }
 
     private void handleBackClick(View view) {
@@ -84,17 +92,6 @@ public class ProfileActivity extends BaseActivity<ProfileViewModel> {
         viewModel
                 .getProfile()
                 .observe(this, this::onProfileLoaded);
-    }
-
-    private void onProfileLoaded(Resource<User> profileResult) {
-        switch (profileResult.status) {
-            case SUCCESS:
-                updateProfileCard(profileResult.data);
-                break;
-
-            case ERROR:
-                break;
-        }
     }
 
     private void updateProfileCard(User profile) {
@@ -116,5 +113,36 @@ public class ProfileActivity extends BaseActivity<ProfileViewModel> {
         startActivity(i);
 
         finish();
+    }
+
+    private void startLoading() {
+        progressbar.setVisibility(View.VISIBLE);
+        container.setVisibility(View.GONE);
+    }
+
+    private void stopLoading() {
+        progressbar.setVisibility(View.GONE);
+        container.setVisibility(View.VISIBLE);
+    }
+
+    private void onProfileLoaded(Resource<User> result) {
+        switch (result.status) {
+            case LOADING:
+                startLoading();
+                break;
+
+            case SUCCESS:
+                updateProfileCard(result.data);
+                stopLoading();
+                break;
+
+            case ERROR:
+                viewModel.addAlertEvent(new AlertEvent(
+                        AlertEvent.Type.ERROR,
+                        null,
+                        "Failed to load your profile.\n" + result.message
+                ));
+                break;
+        }
     }
 }
