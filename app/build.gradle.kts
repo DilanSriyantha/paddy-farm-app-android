@@ -55,4 +55,7 @@ dependencies {
 
     // OkHttp Logging Interceptor (Great for debugging backend requests)
     implementation(libs.logging.interceptor)
+
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.sse)
 }

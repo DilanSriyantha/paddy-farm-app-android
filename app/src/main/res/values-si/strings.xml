@@ -139,4 +139,8 @@
     <string name="maa_wee">මා වී</string>
     <string name="rathu_heenati">රතු හීනටි</string>
     <string name="failed_to_fetch_recommendations">වත්මන් වගා සැසිය සඳහා නිර්දේශ ලබා ගැනීමට අසමත් විය.</string>
+    <string name="notification_title">මාතෘකාව</string>
+    <string name="notification_content">ලෝරෙම් ඉප්සම් ලෝරෙම් ඉප්සම්</string>
+    <string name="notification_datetime">2026/07/06 08:00 පෙ.ව.</string>
+    <string name="notifications">දැනුම්දීම්</string>
 </resources>

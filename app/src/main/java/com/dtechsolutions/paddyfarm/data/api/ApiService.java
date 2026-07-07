@@ -1,11 +1,14 @@
 package com.dtechsolutions.paddyfarm.data.api;
 
 import com.dtechsolutions.paddyfarm.data.models.AuthResponse;
+import com.dtechsolutions.paddyfarm.data.models.BatchPayload;
 import com.dtechsolutions.paddyfarm.data.models.Cultivation;
 import com.dtechsolutions.paddyfarm.data.models.CultivationCreateRequest;
 import com.dtechsolutions.paddyfarm.data.models.CultivationUpdateRequest;
 import com.dtechsolutions.paddyfarm.data.models.Fertilizer;
 import com.dtechsolutions.paddyfarm.data.models.LoginRequest;
+import com.dtechsolutions.paddyfarm.data.models.Notification;
+import com.dtechsolutions.paddyfarm.data.models.NotificationUpdateRequest;
 import com.dtechsolutions.paddyfarm.data.models.RecommendationSummary;
 import com.dtechsolutions.paddyfarm.data.models.RegisterRequest;
 import com.dtechsolutions.paddyfarm.data.models.User;
@@ -44,7 +47,10 @@ public interface ApiService {
     Call<Cultivation> createCultivation(@Body CultivationCreateRequest request);
 
     @PUT("api/v1/cultivations/update")
-    Call<Cultivation> updateCultivation(@Query("id") int id, @Body CultivationUpdateRequest request);
+    Call<Cultivation> updateCultivation(
+            @Query("id") int id,
+            @Body CultivationUpdateRequest request
+    );
 
     @DELETE("api/v1/cultivations/delete")
     Call<Cultivation> deleteCultivation(@Query("id") int id);
@@ -56,4 +62,17 @@ public interface ApiService {
     // fertilizers routes
     @GET("api/v1/fertilizers/findAll")
     Call<List<Fertilizer>> findAllFertilizers();
+
+    // notifications routes
+    @GET("api/v1/notifications/findAll")
+    Call<List<Notification>> findAllNotifications();
+
+    @PUT("api/v1/notifications/update")
+    Call<Notification> updateNotification(
+            @Query("id") int id,
+            @Body() NotificationUpdateRequest request
+    );
+
+    @PUT("api/v1/notifications/markAsRead")
+    Call<BatchPayload> markNotificationsAsRead();
 }

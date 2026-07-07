@@ -138,4 +138,8 @@
     <string name="maa_wee">Maa Wee</string>
     <string name="rathu_heenati">Rathu Heenati</string>
     <string name="failed_to_fetch_recommendations">Failed to fetch recommendations for the current cultivation session.</string>
+    <string name="notification_title">Title</string>
+    <string name="notification_content">Lorem ipsum lorem ipsum</string>
+    <string name="notification_datetime">2026/07/06 08:00 AM</string>
+    <string name="notifications">Notifications</string>
 </resources>

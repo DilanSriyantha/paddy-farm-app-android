@@ -2,7 +2,9 @@ package com.dtechsolutions.paddyfarm.ui.dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -17,10 +19,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dtechsolutions.paddyfarm.R;
+import com.dtechsolutions.paddyfarm.data.models.Notification;
+import com.dtechsolutions.paddyfarm.data.models.NotificationStatus;
 import com.dtechsolutions.paddyfarm.data.models.RecommendationSummary;
 import com.dtechsolutions.paddyfarm.data.models.User;
 import com.dtechsolutions.paddyfarm.ui.diseasedetection.DiseaseDetectionActivity;
 import com.dtechsolutions.paddyfarm.ui.fertilizerprices.FertilizerPricesActivity;
+import com.dtechsolutions.paddyfarm.ui.notifications.NotificationsActivity;
+import com.dtechsolutions.paddyfarm.ui.notifications.NotificationsViewModel;
 import com.dtechsolutions.paddyfarm.ui.profile.ProfileActivity;
 import com.dtechsolutions.paddyfarm.ui.profile.ProfileViewModel;
 import com.dtechsolutions.paddyfarm.ui.recommendations.RecommendationsActivity;
@@ -34,15 +40,21 @@ import com.google.android.material.card.MaterialCardView;
 import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class DashboardActivity extends BaseActivity<DashboardViewModel> {
+    private final String TAG = "[DashboardActivity]";
+
     MaterialCardView btnStartCultivation, btnRecommendations, btnAiChatbot,
     btnDiseaseDetection, btnFertilizerPrices, btnProfile;
-    TextView txtGreeting, txtUsername, txtStage, txtDaysGone;
+    TextView txtGreeting, txtUsername, txtStage, txtDaysGone, txtNotificationCount;
     ImageView imgPlant;
     LinearLayout summaryContainer;
     ProgressBar pbSummary;
+    ImageButton btnNotifications;
+
+    NotificationsViewModel notificationsViewModel;
 
     @Override
     protected Class<DashboardViewModel> getViewModelClass() {
@@ -63,9 +75,27 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
         initialize();
         observeProfile();
         observeSummary();
+        observeNotifications();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        notificationsViewModel.startNotificationStream();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        notificationsViewModel.stopNotificationStream();
     }
 
     private void initialize() {
+        btnNotifications = findViewById(R.id.btnNotifications);
+        btnNotifications.setOnClickListener(this::handleNotificationsClick);
+
+        txtNotificationCount = findViewById(R.id.txtNotificationCount);
+
         btnStartCultivation = findViewById(R.id.btnStartCultivation);
         btnStartCultivation.setOnClickListener(this::handleStartCultivationClick);
 
@@ -93,6 +123,11 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
         summaryContainer = findViewById(R.id.summaryContainer);
         imgPlant = findViewById(R.id.imgPlant);
         pbSummary = findViewById(R.id.pbSummaryCard);
+    }
+
+    private void handleNotificationsClick(View view) {
+        Intent i = new Intent(DashboardActivity.this, NotificationsActivity.class);
+        startActivity(i);
     }
 
     private void handleStartCultivationClick(View view) {
@@ -162,6 +197,22 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
         summaryContainer.setVisibility(View.VISIBLE);
     }
 
+    private void updateNotificationsBadge(List<Notification> notifications) {
+        if(notifications == null) return;
+
+        int count = (int) notifications.stream().filter(notification -> {
+            return notification.getStatus().equals(NotificationStatus.NOT_READ);
+        }).count();
+
+        if(count == 0) {
+            txtNotificationCount.setVisibility(View.GONE);
+            return;
+        }
+
+        txtNotificationCount.setText(String.valueOf(count));
+        txtNotificationCount.setVisibility(View.VISIBLE);
+    }
+
     private void observeProfile() {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         profileViewModel.fetchProfile();
@@ -204,6 +255,19 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
                         ));
                         break;
                 }
+            }
+        });
+    }
+
+    private void observeNotifications() {
+        notificationsViewModel = new NotificationsViewModel();
+        notificationsViewModel.fetchNotifications();
+        notificationsViewModel.getNotifications().observe(this, new Observer<Resource<List<Notification>>>() {
+            @Override
+            public void onChanged(Resource<List<Notification>> result) {
+                if(result.status != Resource.Status.SUCCESS) return;
+
+                updateNotificationsBadge(result.data);
             }
         });
     }

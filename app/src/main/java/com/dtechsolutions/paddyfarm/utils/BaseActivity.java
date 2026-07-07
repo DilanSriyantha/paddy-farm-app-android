@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import okhttp3.sse.EventSource;
+
 public abstract class BaseActivity<T extends BaseViewModel> extends AppCompatActivity {
     protected T viewModel;
 

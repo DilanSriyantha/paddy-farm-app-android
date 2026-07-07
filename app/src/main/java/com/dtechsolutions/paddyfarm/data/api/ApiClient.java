@@ -2,8 +2,14 @@ package com.dtechsolutions.paddyfarm.data.api;
 
 import com.dtechsolutions.paddyfarm.utils.TokenProvider.TokenProvider;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.sse.EventSource;
+import okhttp3.sse.EventSourceListener;
+import okhttp3.sse.EventSources;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -31,5 +37,29 @@ public class ApiClient {
         }
 
         return apiService;
+    }
+
+    /**
+     * Creates a specialized EventSource instance for SSE streaming.
+     * This uses an infinite read timeout and appends AuthIntercepter automatically.
+     */
+    public static EventSource createSseConnection(String relativeUrl, TokenProvider tokenProvider, EventSourceListener listener) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+
+        OkHttpClient sseClient = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(0, TimeUnit.SECONDS)
+                .addInterceptor(new AuthInterceptor(tokenProvider))
+                .addInterceptor(logging)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(baseUrl + relativeUrl)
+                .header("Accept", "text/event-stream")
+                .header("Cache-Control", "no-cache")
+                .build();
+
+        return EventSources.createFactory(sseClient).newEventSource(request, listener);
     }
 }
