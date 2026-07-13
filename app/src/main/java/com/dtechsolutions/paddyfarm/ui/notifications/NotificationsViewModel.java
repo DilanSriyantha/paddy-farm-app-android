@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
 
 import com.dtechsolutions.paddyfarm.MyApplication;
 import com.dtechsolutions.paddyfarm.data.api.ApiClient;
@@ -29,61 +30,42 @@ import okhttp3.sse.EventSourceListener;
 public class NotificationsViewModel extends BaseViewModel {
     private final String TAG = "[NotificationsViewModel - SSE]";
 
-    private final MutableLiveData<Resource<List<Notification>>> notifications;
     private final NotificationsRepository notificationsRepository;
     private EventSource notificationEventSource;
 
-    public NotificationsViewModel() {
-        notifications = new MutableLiveData<>();
-        notificationsRepository = new NotificationsRepository();
-    }
+    private final MutableLiveData<Integer> fetchTrigger = new MutableLiveData<>(0);
 
-    public void stopNotificationStream() {
-        if(notificationEventSource == null) return;
-        notificationEventSource.cancel();
-        notificationEventSource = null;
+    private final LiveData<Resource<List<Notification>>> notificationsResult;
+
+    public NotificationsViewModel() {
+        notificationsRepository = new NotificationsRepository();
+
+        notificationsResult = Transformations.switchMap(fetchTrigger, onChange -> notificationsRepository.findAll());
     }
 
     public void fetchNotifications() {
-        notificationsRepository.findAll().observeForever(new Observer<Resource<List<Notification>>>() {
-            @Override
-            public void onChanged(Resource<List<Notification>> result) {
-                switch (result.status){
-                    case LOADING:
-                        notifications.postValue(Resource.loading());
-                        break;
-
-                    case SUCCESS:
-                        notifications.postValue(Resource.success(result.data));
-                        break;
-
-                    case ERROR:
-                        notifications.postValue(Resource.error(result.message));
-                        break;
-                }
-            }
-        });
+        Integer current = fetchTrigger.getValue();
+        fetchTrigger.postValue(current == null ? 1 : current + 1);
     }
 
     public LiveData<Resource<List<Notification>>> getNotifications() {
-        return notifications;
+        return notificationsResult;
     }
 
     public void markAllAsRead() {
         notificationsRepository.markAsRead().observeForever(new Observer<Resource<BatchPayload>>() {
             @Override
             public void onChanged(Resource<BatchPayload> result) {
-                switch (result.status) {
-                    case SUCCESS:
-                        Log.i(TAG, "Notifications have been marked as read.");
-                        break;
-
-                    case ERROR:
-                        Log.e(TAG, "Error occurred while updating notifications. " + result.message);
-                        break;
-                }
+                if(result.status != Resource.Status.SUCCESS) return;
+                notificationsRepository.markAsRead().removeObserver(this);
             }
         });
+    }
+
+    public void stopNotificationStream() {
+        if(notificationEventSource == null) return;
+        notificationEventSource.cancel();
+        notificationEventSource = null;
     }
 
     public void startNotificationStream() {
@@ -103,13 +85,7 @@ public class NotificationsViewModel extends BaseViewModel {
             public void onEvent(@NonNull EventSource eventSource, @Nullable String id, @Nullable String type, @NonNull String data) {
                 try{
                     Log.i(TAG, "Payload received: " + data);
-
-                    Notification newNotification = gson.fromJson(data, Notification.class);
-
-                    List<Notification> newNotifications = Objects.requireNonNull(notifications.getValue()).data;
-                    newNotifications.add(newNotification);
-
-                    notifications.postValue(Resource.success(newNotifications));
+                    fetchNotifications();
                 }catch (JsonSyntaxException e) {
                     Log.e(TAG, "Failed to parse incoming notification JSON structure");
                 }

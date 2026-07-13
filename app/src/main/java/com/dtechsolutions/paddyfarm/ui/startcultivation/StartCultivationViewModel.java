@@ -2,34 +2,34 @@ package com.dtechsolutions.paddyfarm.ui.startcultivation;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.dtechsolutions.paddyfarm.data.models.Cultivation;
 import com.dtechsolutions.paddyfarm.data.models.CultivationCreateRequest;
 import com.dtechsolutions.paddyfarm.data.repositories.CultivationsRepository;
-import com.dtechsolutions.paddyfarm.utils.AlertEvent;
 import com.dtechsolutions.paddyfarm.utils.BaseViewModel;
 import com.dtechsolutions.paddyfarm.utils.Resource;
 
 public class StartCultivationViewModel extends BaseViewModel {
+    private final String TAG = "[StartCultivationViewModel]";
+
     private final CultivationsRepository cultivationsRepository;
-    private final MutableLiveData<Resource<Cultivation>> result;
+
+    private final MutableLiveData<CultivationCreateRequest> createTrigger = new MutableLiveData<>();
+
+    private final LiveData<Resource<Cultivation>> createResult;
 
     public StartCultivationViewModel() {
         cultivationsRepository = new CultivationsRepository();
-        result = new MutableLiveData<>();
-    }
 
-    public LiveData<Resource<Cultivation>> getCreateResult() {
-        return result;
+        createResult = Transformations.switchMap(createTrigger, cultivationsRepository::create);
     }
 
     public void create(CultivationCreateRequest request) {
-        cultivationsRepository
-                .create(request)
-                .observeForever(this::onCreateStateChange);
+        createTrigger.postValue(request);
     }
 
-    private void onCreateStateChange(Resource<Cultivation> result) {
-        this.result.postValue(result);
+    public LiveData<Resource<Cultivation>> getCreateResult() {
+        return createResult;
     }
 }

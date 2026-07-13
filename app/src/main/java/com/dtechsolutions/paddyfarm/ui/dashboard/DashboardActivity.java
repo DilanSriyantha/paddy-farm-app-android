@@ -50,7 +50,7 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
     btnDiseaseDetection, btnFertilizerPrices, btnProfile;
     TextView txtGreeting, txtUsername, txtStage, txtDaysGone, txtNotificationCount, txtTipsCardTitle;
     ImageView imgPlant;
-    LinearLayout summaryContainer;
+    LinearLayout summaryContainer, startNewCultivationSessionContainer;
     ProgressBar pbSummary;
     ImageButton btnNotifications;
 
@@ -76,6 +76,12 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
         observeProfile();
         observeSummary();
         observeNotifications();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.fetchSummary();
     }
 
     @Override
@@ -126,6 +132,8 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
 
         txtTipsCardTitle = findViewById(R.id.txtTipsCardTitle);
         txtTipsCardTitle.setSelected(true);
+
+        startNewCultivationSessionContainer = findViewById(R.id.startNewCultivationSessionContainer);
     }
 
     private void handleNotificationsClick(View view) {
@@ -193,6 +201,7 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
         pbSummary.setVisibility(View.VISIBLE);
         imgPlant.setVisibility(View.INVISIBLE);
         summaryContainer.setVisibility(View.GONE);
+        startNewCultivationSessionContainer.setVisibility(View.GONE);
     }
 
     private void stopSummaryLoading() {
@@ -220,24 +229,27 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
     private void observeProfile() {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         profileViewModel.fetchProfile();
-        profileViewModel.getProfile().observe(this, new Observer<Resource<User>>() {
+        profileViewModel.getProfileResult().observe(this, new Observer<Resource<User>>() {
             @Override
             public void onChanged(Resource<User> result) {
-                switch (result.status) {
-                    case SUCCESS:
-                        Objects.requireNonNull(txtGreeting).setText(getGreeting());
-                        Objects.requireNonNull(txtUsername).setText(result.data.getName());
-                        break;
+                if(result.status != Resource.Status.SUCCESS) return;
 
-                    case ERROR:
-                        break;
-                }
+                Objects.requireNonNull(txtGreeting).setText(getGreeting());
+                Objects.requireNonNull(txtUsername).setText(result.data.getName());
             }
         });
     }
 
+    private void showStartNewCultivationSessionBanner() {
+        startNewCultivationSessionContainer.setVisibility(View.VISIBLE);
+
+        if(summaryContainer.getVisibility() == View.VISIBLE){
+            summaryContainer.setVisibility(View.INVISIBLE);
+            imgPlant.setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void observeSummary() {
-        viewModel.fetchSummary();
         viewModel.getResult().observe(this, new Observer<Resource<RecommendationSummary>>() {
             @Override
             public void onChanged(Resource<RecommendationSummary> result) {
@@ -252,11 +264,8 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
                         break;
 
                     case ERROR:
-                        viewModel.addAlertEvent(new AlertEvent(
-                                AlertEvent.Type.ERROR,
-                                null,
-                                "Failed to fetch session summary."
-                        ));
+                        stopSummaryLoading();
+                        showStartNewCultivationSessionBanner();
                         break;
                 }
             }

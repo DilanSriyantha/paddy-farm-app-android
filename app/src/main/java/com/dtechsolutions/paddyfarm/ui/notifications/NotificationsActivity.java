@@ -2,6 +2,7 @@ package com.dtechsolutions.paddyfarm.ui.notifications;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -13,11 +14,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dtechsolutions.paddyfarm.R;
 import com.dtechsolutions.paddyfarm.adapters.NotificationsAdapter;
+import com.dtechsolutions.paddyfarm.data.models.BatchPayload;
 import com.dtechsolutions.paddyfarm.data.models.Notification;
 import com.dtechsolutions.paddyfarm.ui.dashboard.DashboardActivity;
 import com.dtechsolutions.paddyfarm.utils.AlertEvent;
@@ -28,6 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationsActivity extends BaseActivity<NotificationsViewModel> {
+    private final String TAG = "[NotificationsActivity]";
+
     private ConstraintLayout containerNotifications;
     private ProgressBar progressBar;
 
@@ -64,7 +69,6 @@ public class NotificationsActivity extends BaseActivity<NotificationsViewModel> 
 
         populateNotificationsRecycler();
         listenToNotifications();
-        markNotificationsAsRead();
     }
 
     private void handleBackClick(View view) {
@@ -109,6 +113,7 @@ public class NotificationsActivity extends BaseActivity<NotificationsViewModel> 
             case SUCCESS:
                 notificationsAdapter.setNotifications(result.data);
                 stopLoading();
+                markNotificationsAsRead();
                 break;
 
             case ERROR:

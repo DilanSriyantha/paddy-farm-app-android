@@ -2,10 +2,12 @@ package com.dtechsolutions.paddyfarm.ui.register;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.dtechsolutions.paddyfarm.MyApplication;
 import com.dtechsolutions.paddyfarm.data.models.AuthResponse;
+import com.dtechsolutions.paddyfarm.data.models.RegisterRequest;
 import com.dtechsolutions.paddyfarm.data.repositories.AuthRepository;
 import com.dtechsolutions.paddyfarm.enums.PreferredLanguage;
 import com.dtechsolutions.paddyfarm.utils.AlertEvent;
@@ -14,36 +16,28 @@ import com.dtechsolutions.paddyfarm.utils.Resource;
 import com.dtechsolutions.paddyfarm.utils.TokenProvider.SharedPrefsTokenProvider;
 
 public class RegisterViewModel extends BaseViewModel {
-    private final AuthRepository repository;
-    private final MutableLiveData<Resource<AuthResponse>> result;
+    private final AuthRepository authRepository;
+
+    private final MutableLiveData<RegisterRequest> registerTrigger = new MutableLiveData<>();
+
+    private final LiveData<Resource<AuthResponse>> registerResponse;
 
     public RegisterViewModel() {
-        repository = new AuthRepository();
-        result = new MutableLiveData<>();
+        authRepository = new AuthRepository();
+
+        registerResponse = Transformations.switchMap(registerTrigger, authRepository::register);
     }
 
-    public void register(
-            String name,
-            String email,
-            String phoneNumber,
-            String password,
-            PreferredLanguage preferredLanguage
-    ) {
-        repository
-                .register(name, email, password, phoneNumber, preferredLanguage)
-                .observeForever(this::updateRegisterResult);
+    public void register(String name, String email, String phone, String password, PreferredLanguage preferredLanguage) {
+        RegisterRequest request = new RegisterRequest(name, email, phone, password, preferredLanguage);
+        register(request);
     }
 
-    public LiveData<Resource<AuthResponse>> getRegisterResult() {
-        return result;
+    public void register(RegisterRequest request) {
+        registerTrigger.postValue(request);
     }
 
-    private void updateRegisterResult(Resource<AuthResponse> authResponse) {
-        if(authResponse.status == Resource.Status.SUCCESS) {
-            SharedPrefsTokenProvider tokenProvider = (SharedPrefsTokenProvider) MyApplication.getTokenProvider();
-            tokenProvider.saveToken(authResponse.data.getAccessToken());
-        }
-
-        result.postValue(authResponse);
+    public LiveData<Resource<AuthResponse>> getRegisterResponse() {
+        return registerResponse;
     }
 }

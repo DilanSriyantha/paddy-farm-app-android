@@ -99,6 +99,23 @@
                         android:layout_centerHorizontal="true"/>
 
                     <LinearLayout
+                        android:id="@+id/startNewCultivationSessionContainer"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/start_new_cultivation_session"
+                            android:textAlignment="center"
+                            android:textSize="16sp"
+                            android:textStyle="italic" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/summaryContainer"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

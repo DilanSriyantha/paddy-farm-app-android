@@ -20,11 +20,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dtechsolutions.paddyfarm.R;
 import com.dtechsolutions.paddyfarm.adapters.MessageAdapter;
+import com.dtechsolutions.paddyfarm.data.models.ChatResponse;
 import com.dtechsolutions.paddyfarm.data.models.Message;
+import com.dtechsolutions.paddyfarm.enums.Sender;
 import com.dtechsolutions.paddyfarm.ui.dashboard.DashboardActivity;
+import com.dtechsolutions.paddyfarm.utils.AlertEvent;
 import com.dtechsolutions.paddyfarm.utils.BaseActivity;
+import com.dtechsolutions.paddyfarm.utils.Resource;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -78,8 +83,8 @@ public class ChatbotActivity extends BaseActivity<ChatbotViewModel> {
         pbChatbot = findViewById(R.id.pbChatbot);
 
         populateRecycler();
-        observeIsChatHistoryLoading();
-        observeMessages();
+        observeChatHistory();
+        observeReply();
     }
 
     private void populateRecycler() {
@@ -100,8 +105,10 @@ public class ChatbotActivity extends BaseActivity<ChatbotViewModel> {
         if(message.isEmpty()) return;
 
 
-        viewModel.sendMessage(message, getString(R.string.thinking));
+        viewModel.sendMessage(message);
         txtMessage.setText("");
+
+        messageAdapter.addNewMessage(message, Sender.USER);
     }
 
     private void startLoading() {
@@ -114,23 +121,80 @@ public class ChatbotActivity extends BaseActivity<ChatbotViewModel> {
         pbChatbot.setVisibility(View.GONE);
     }
 
-    private void observeIsChatHistoryLoading() {
-        viewModel.isChatHistoryLoading().observe(this, new Observer<Boolean>() {
+    private void startThinking() {
+        messageAdapter.addNewMessage(getString(R.string.thinking), Sender.CHATBOT);
+        recyclerMessages.scrollToPosition(messageAdapter.getMessages().size() - 1);
+    }
+
+    private void stopThinking() {
+        messageAdapter.pop();
+    }
+
+    private void updateChat(List<Message> updatedMessages) {
+        messageAdapter.setMessages(updatedMessages);
+    }
+
+    private void updateChat(ChatResponse chatResponse) {
+        int id = (int)(Math.random() * 1000) + 1;
+        String content = chatResponse.getReply();
+        Message newMessage = new Message(id, content, new Date(), Sender.CHATBOT);
+
+        List<Message> updatedMessages = messageAdapter.getMessages();
+        updatedMessages.add(newMessage);
+        messageAdapter.setMessages(updatedMessages);
+    }
+
+    private void observeChatHistory() {
+        viewModel.fetchChatHistory();
+        viewModel.getChatHistory().observe(this, new Observer<Resource<List<Message>>>() {
             @Override
-            public void onChanged(Boolean isChatHistoryLoading) {
-                if(isChatHistoryLoading) startLoading();
-                else stopLoading();
+            public void onChanged(Resource<List<Message>> result) {
+                switch (result.status) {
+                    case LOADING:
+                        startLoading();
+                        break;
+
+                    case SUCCESS:
+                        updateChat(result.getContentIfNotHandled());
+                        stopLoading();
+                        break;
+
+                    case ERROR:
+                        viewModel.addAlertEvent(new AlertEvent(
+                                AlertEvent.Type.ERROR,
+                                null,
+                                result.message
+                        ));
+                        stopLoading();
+                        break;
+                }
             }
         });
     }
 
-    private void observeMessages() {
-        viewModel.getMessages().observe(this, new Observer<List<Message>>() {
+    private void observeReply() {
+        viewModel.getReply().observe(this, new Observer<Resource<ChatResponse>>() {
             @Override
-            public void onChanged(List<Message> messages) {
-                if(messageAdapter == null) return;
-                messageAdapter.setMessages(messages);
-                recyclerMessages.scrollToPosition(messages.size() - 1);
+            public void onChanged(Resource<ChatResponse> reply) {
+                switch (reply.status) {
+                    case LOADING:
+                        startThinking();
+                        break;
+
+                    case SUCCESS:
+                        stopThinking();
+                        updateChat(reply.getContentIfNotHandled());
+                        break;
+
+                    case ERROR:
+                        viewModel.addAlertEvent(new AlertEvent(
+                                AlertEvent.Type.ERROR,
+                                null,
+                                reply.message
+                        ));
+                        stopThinking();
+                        break;
+                }
             }
         });
     }

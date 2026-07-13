@@ -41,5 +41,7 @@ public class GetStartedActivity extends AppCompatActivity {
     private void handleGetStartedClick(View view) {
         Intent i = new Intent(GetStartedActivity.this, LoginActivity.class);
         startActivity(i);
+
+        finish();
     }
 }

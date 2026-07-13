@@ -2,6 +2,7 @@ package com.dtechsolutions.paddyfarm.ui.fertilizerprices;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.dtechsolutions.paddyfarm.data.models.Fertilizer;
 import com.dtechsolutions.paddyfarm.data.repositories.FertilizersRepository;
@@ -12,22 +13,22 @@ import java.util.List;
 
 public class FertilizerPricesViewModel extends BaseViewModel {
     private final FertilizersRepository fertilizersRepository;
-    private final MutableLiveData<Resource<List<Fertilizer>>> result;
+
+    private final MutableLiveData<Integer> fetchTrigger = new MutableLiveData<>(0);
+
+    private final LiveData<Resource<List<Fertilizer>>> result;
 
     public FertilizerPricesViewModel() {
         fertilizersRepository = new FertilizersRepository();
-        result = new MutableLiveData<>();
+        result = Transformations.switchMap(fetchTrigger, onChange -> fertilizersRepository.findAll());
     }
 
     public void fetchFertilizers() {
-        fertilizersRepository.findAll().observeForever(this::onResultChange);
+        Integer current = fetchTrigger.getValue();
+        fetchTrigger.postValue(current == null ? 1 : current + 1);
     }
 
     public LiveData<Resource<List<Fertilizer>>> getResult() {
         return result;
-    }
-
-    private void onResultChange(Resource<List<Fertilizer>> result) {
-        this.result.postValue(result);
     }
 }

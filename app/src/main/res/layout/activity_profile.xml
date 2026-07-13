@@ -328,221 +328,224 @@
                         </RelativeLayout>
                     </LinearLayout>
 
-                    <com.google.android.material.divider.MaterialDivider
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        app:dividerThickness="1dp"
-                        app:dividerInsetStart="16dp"
-                        app:dividerInsetEnd="16dp"
-                        app:dividerColor="@android:color/darker_gray"/>
+<!--                    <com.google.android.material.divider.MaterialDivider-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="8dp"-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        app:dividerThickness="1dp"-->
+<!--                        app:dividerInsetStart="16dp"-->
+<!--                        app:dividerInsetEnd="16dp"-->
+<!--                        app:dividerColor="@android:color/darker_gray"/>-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:padding="16dp">-->
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+<!--                        <RelativeLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content">-->
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:layout_alignParentStart="true">
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:orientation="horizontal"-->
+<!--                                android:gravity="center_vertical"-->
+<!--                                android:layout_alignParentStart="true">-->
 
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/badge_2"
-                                    android:padding="6dp"
-                                    android:clickable="true"
-                                    android:focusable="true">
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:background="@drawable/badge_2"-->
+<!--                                    android:padding="6dp"-->
+<!--                                    android:clickable="true"-->
+<!--                                    android:focusable="true">-->
 
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:src="@drawable/baseline_space_dashboard_24"/>
-                                </LinearLayout>
+<!--                                    <ImageView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:src="@drawable/baseline_space_dashboard_24"/>-->
+<!--                                </LinearLayout>-->
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/my_fields"
-                                    android:layout_marginStart="10dp"/>
-                            </LinearLayout>
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@string/my_fields"-->
+<!--                                    android:layout_marginStart="10dp"/>-->
+<!--                            </LinearLayout>-->
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:gravity="center_vertical">
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="match_parent"-->
+<!--                                android:layout_alignParentEnd="true"-->
+<!--                                android:layout_centerVertical="true"-->
+<!--                                android:orientation="vertical"-->
+<!--                                android:gravity="center_vertical">-->
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/baseline_chevron_right_24_black"/>
-                            </LinearLayout>
-                        </RelativeLayout>
-                    </LinearLayout>
+<!--                                <ImageView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:src="@drawable/baseline_chevron_right_24_black"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </RelativeLayout>-->
+<!--                    </LinearLayout>-->
 
-                    <com.google.android.material.divider.MaterialDivider
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        app:dividerThickness="1dp"
-                        app:dividerInsetStart="16dp"
-                        app:dividerInsetEnd="16dp"
-                        app:dividerColor="@android:color/darker_gray"/>
+<!--                    <com.google.android.material.divider.MaterialDivider-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="8dp"-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        app:dividerThickness="1dp"-->
+<!--                        app:dividerInsetStart="16dp"-->
+<!--                        app:dividerInsetEnd="16dp"-->
+<!--                        app:dividerColor="@android:color/darker_gray"/>-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:padding="16dp">-->
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+<!--                        <RelativeLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content">-->
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:layout_alignParentStart="true">
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:orientation="horizontal"-->
+<!--                                android:gravity="center_vertical"-->
+<!--                                android:layout_alignParentStart="true">-->
 
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/badge_2"
-                                    android:padding="6dp"
-                                    android:clickable="true"
-                                    android:focusable="true">
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:background="@drawable/badge_2"-->
+<!--                                    android:padding="6dp"-->
+<!--                                    android:clickable="true"-->
+<!--                                    android:focusable="true">-->
 
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:src="@drawable/baseline_settings_24"/>
-                                </LinearLayout>
+<!--                                    <ImageView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:src="@drawable/baseline_settings_24"/>-->
+<!--                                </LinearLayout>-->
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/settings"
-                                    android:layout_marginStart="10dp"/>
-                            </LinearLayout>
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@string/settings"-->
+<!--                                    android:layout_marginStart="10dp"/>-->
+<!--                            </LinearLayout>-->
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:gravity="center_vertical">
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="match_parent"-->
+<!--                                android:layout_alignParentEnd="true"-->
+<!--                                android:layout_centerVertical="true"-->
+<!--                                android:orientation="vertical"-->
+<!--                                android:gravity="center_vertical">-->
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/baseline_chevron_right_24_black"/>
-                            </LinearLayout>
-                        </RelativeLayout>
-                    </LinearLayout>
+<!--                                <ImageView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:src="@drawable/baseline_chevron_right_24_black"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </RelativeLayout>-->
+<!--                    </LinearLayout>-->
 
-                    <com.google.android.material.divider.MaterialDivider
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        app:dividerThickness="1dp"
-                        app:dividerInsetStart="16dp"
-                        app:dividerInsetEnd="16dp"
-                        app:dividerColor="@android:color/darker_gray"/>
+<!--                    <com.google.android.material.divider.MaterialDivider-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="8dp"-->
+<!--                        android:layout_marginBottom="8dp"-->
+<!--                        app:dividerThickness="1dp"-->
+<!--                        app:dividerInsetStart="16dp"-->
+<!--                        app:dividerInsetEnd="16dp"-->
+<!--                        app:dividerColor="@android:color/darker_gray"/>-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:padding="16dp">-->
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+<!--                        <RelativeLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content">-->
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:layout_alignParentStart="true">
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:orientation="horizontal"-->
+<!--                                android:gravity="center_vertical"-->
+<!--                                android:layout_alignParentStart="true">-->
 
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/badge_2"
-                                    android:padding="6dp"
-                                    android:clickable="true"
-                                    android:focusable="true">
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:background="@drawable/badge_2"-->
+<!--                                    android:padding="6dp"-->
+<!--                                    android:clickable="true"-->
+<!--                                    android:focusable="true">-->
 
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:src="@drawable/baseline_help_24"/>
-                                </LinearLayout>
+<!--                                    <ImageView-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:src="@drawable/baseline_help_24"/>-->
+<!--                                </LinearLayout>-->
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/help_and_support"
-                                    android:layout_marginStart="10dp"/>
-                            </LinearLayout>
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="@string/help_and_support"-->
+<!--                                    android:layout_marginStart="10dp"/>-->
+<!--                            </LinearLayout>-->
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:orientation="vertical"
-                                android:gravity="center_vertical">
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="match_parent"-->
+<!--                                android:layout_alignParentEnd="true"-->
+<!--                                android:layout_centerVertical="true"-->
+<!--                                android:orientation="vertical"-->
+<!--                                android:gravity="center_vertical">-->
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/baseline_chevron_right_24_black"/>
-                            </LinearLayout>
-                        </RelativeLayout>
-                    </LinearLayout>
+<!--                                <ImageView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:src="@drawable/baseline_chevron_right_24_black"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </RelativeLayout>-->
+<!--                    </LinearLayout>-->
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_margin="20dp"
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <Button
-                    android:id="@+id/btnLogout"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:textColor="@color/red"
-                    app:strokeColor="@color/red"
-                    app:strokeWidth="1dp"
-                    app:backgroundTint="@android:color/white"
-                    android:drawableEnd="@drawable/baseline_logout_24"
-                    android:text="@string/logout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+                android:layout_height="10dp"/>
         </LinearLayout>
     </ScrollView>
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btnLogout"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:textColor="@color/red"
+            app:strokeColor="@color/red"
+            app:strokeWidth="1dp"
+            app:backgroundTint="@android:color/white"
+            android:drawableEnd="@drawable/baseline_logout_24"
+            android:text="@string/logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.dtechsolutions.paddyfarm.ui.cultivationhistory;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.dtechsolutions.paddyfarm.data.models.Cultivation;
 import com.dtechsolutions.paddyfarm.data.repositories.CultivationsRepository;
@@ -12,15 +13,20 @@ import java.util.List;
 
 public class CultivationHistoryViewModel extends BaseViewModel {
     private final CultivationsRepository cultivationsRepository;
-    private final MutableLiveData<Resource<List<Cultivation>>> result;
+
+    private final MutableLiveData<Integer> fetchTrigger = new MutableLiveData<>(0);
+
+    private final LiveData<Resource<List<Cultivation>>> result;
 
     public CultivationHistoryViewModel() {
         cultivationsRepository = new CultivationsRepository();
-        result = new MutableLiveData<>();
+
+        result = Transformations.switchMap(fetchTrigger, onChange -> cultivationsRepository.findAll());
     }
 
     public void fetchCultivationHistory() {
-        cultivationsRepository.findAll().observeForever(result::postValue);
+        Integer current = fetchTrigger.getValue();
+        fetchTrigger.postValue(current == null ? 1 : current + 1);
     }
 
     public LiveData<Resource<List<Cultivation>>> getResult() {

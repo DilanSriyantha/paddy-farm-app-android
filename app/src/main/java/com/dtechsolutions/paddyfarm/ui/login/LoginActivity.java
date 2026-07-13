@@ -12,15 +12,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.dtechsolutions.paddyfarm.MyApplication;
 import com.dtechsolutions.paddyfarm.R;
+import com.dtechsolutions.paddyfarm.data.models.AuthResponse;
+import com.dtechsolutions.paddyfarm.data.models.LoginRequest;
 import com.dtechsolutions.paddyfarm.ui.register.RegisterActivity;
 import com.dtechsolutions.paddyfarm.ui.dashboard.DashboardActivity;
 import com.dtechsolutions.paddyfarm.utils.AlertEvent;
 import com.dtechsolutions.paddyfarm.utils.AlertManager;
 import com.dtechsolutions.paddyfarm.utils.BaseActivity;
 import com.dtechsolutions.paddyfarm.utils.PreferenceManager;
+import com.dtechsolutions.paddyfarm.utils.Resource;
+import com.dtechsolutions.paddyfarm.utils.TokenProvider.SharedPrefsTokenProvider;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Objects;
@@ -111,28 +117,36 @@ public class LoginActivity extends BaseActivity<LoginViewModel> {
         pbLoginLoading.setVisibility(View.GONE);
     }
 
+    private void storeAccessToken(AuthResponse response) {
+        SharedPrefsTokenProvider tokenProvider = (SharedPrefsTokenProvider) MyApplication.getTokenProvider();
+        tokenProvider.saveToken(response.getAccessToken());
+    }
+
     private void observeAuthResponse() {
-        viewModel.getLoginResult()
-                .observe(this, result -> {
-                    switch (result.status) {
-                        case LOADING:
-                            startLoading();
-                            break;
+        viewModel.getLoginResponse().observe(this, new Observer<Resource<AuthResponse>>() {
+            @Override
+            public void onChanged(Resource<AuthResponse> result) {
+                switch (result.status) {
+                    case LOADING:
+                        startLoading();
+                        break;
 
-                        case SUCCESS:
-                            goToDashboard();
-                            stopLoading();
-                            break;
+                    case SUCCESS:
+                        storeAccessToken(result.getContentIfNotHandled());
+                        goToDashboard();
+                        stopLoading();
+                        break;
 
-                        case ERROR:
-                            viewModel.addAlertEvent(new AlertEvent(
-                                    AlertEvent.Type.ERROR,
-                                    null,
-                                    "Failed to log into your account.\n" + result.message
-                            ));
-                            stopLoading();
-                            break;
-                    }
-                });
+                    case ERROR:
+                        viewModel.addAlertEvent(new AlertEvent(
+                                AlertEvent.Type.ERROR,
+                                null,
+                                "Failed to log into your account.\n" + result.message
+                        ));
+                        stopLoading();
+                        break;
+                }
+            }
+        });
     }
 }

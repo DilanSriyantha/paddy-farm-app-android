@@ -45,9 +45,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void observeProfile() {
         viewModel.fetchProfile();
-        viewModel
-                .getProfile()
-                .observe(this, this::onProfileLoaded);
+        viewModel.getProfileResult().observe(this, this::onProfileLoaded);
     }
 
     private void onProfileLoaded(Resource<User> profile) {

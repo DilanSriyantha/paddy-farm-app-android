@@ -2,6 +2,7 @@ package com.dtechsolutions.paddyfarm.ui.diseasedetection;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.dtechsolutions.paddyfarm.data.models.DiseaseDetectionResult;
 import com.dtechsolutions.paddyfarm.data.repositories.DiseaseDetectionResultsRepository;
@@ -15,32 +16,38 @@ public class DiseaseDetectionViewModel extends BaseViewModel {
     private final String TAG = "[DiseaseDetectionViewModel]";
 
     private final DiseaseDetectionResultsRepository diseaseDetectionResultsRepository;
-    private final MutableLiveData<Resource<List<DiseaseDetectionResult>>> results;
-    private final MutableLiveData<Resource<DiseaseDetectionResult>> latestResult;
-    private final MutableLiveData<Resource<DiseaseDetectionResult>> scanResult;
+
+    private final MutableLiveData<Boolean> listFetchTrigger = new MutableLiveData<>(false);
+    private final MutableLiveData<Integer> latestResultFetchTrigger = new MutableLiveData<>(0);
+    private final MutableLiveData<File> scanTrigger = new MutableLiveData<>();
+
+    private final LiveData<Resource<List<DiseaseDetectionResult>>> resultsList;
+    private final LiveData<Resource<DiseaseDetectionResult>> latestResult;
+    private final LiveData<Resource<DiseaseDetectionResult>> scanResult;
 
     public DiseaseDetectionViewModel() {
         diseaseDetectionResultsRepository = new DiseaseDetectionResultsRepository();
-        results = new MutableLiveData<>();
-        latestResult = new MutableLiveData<>();
-        scanResult = new MutableLiveData<>();
+
+        resultsList = Transformations.switchMap(listFetchTrigger, shouldFetch -> diseaseDetectionResultsRepository.findAllResults());
+        latestResult = Transformations.switchMap(latestResultFetchTrigger, shouldFetch -> diseaseDetectionResultsRepository.findLatestResult());
+        scanResult = Transformations.switchMap(scanTrigger, diseaseDetectionResultsRepository::predictDisease);
     }
 
     public void fetchDiseaseDetectionResults() {
-        diseaseDetectionResultsRepository.findAllResults().observeForever(results::postValue);
+        listFetchTrigger.postValue(true);
     }
 
     public void fetchLatestDiseaseDetectionResult() {
-        diseaseDetectionResultsRepository.findLatestResult().observeForever(latestResult::postValue);
+        Integer current = latestResultFetchTrigger.getValue();
+        latestResultFetchTrigger.postValue(current == null ? 1 : current + 1);
     }
 
     public void predictDisease(File imageFile) {
-        cleanScanResult();
-        diseaseDetectionResultsRepository.predictDisease(imageFile).observeForever(scanResult::postValue);
+        scanTrigger.postValue(imageFile);
     }
 
-    public LiveData<Resource<List<DiseaseDetectionResult>>> getResults() {
-        return results;
+    public LiveData<Resource<List<DiseaseDetectionResult>>> getResultsList() {
+        return resultsList;
     }
 
     public LiveData<Resource<DiseaseDetectionResult>> getLatestResult() {
@@ -49,9 +56,5 @@ public class DiseaseDetectionViewModel extends BaseViewModel {
 
     public LiveData<Resource<DiseaseDetectionResult>> getScanResult() {
         return scanResult;
-    }
-
-    public void cleanScanResult() {
-        scanResult.postValue(Resource.loading());
     }
 }

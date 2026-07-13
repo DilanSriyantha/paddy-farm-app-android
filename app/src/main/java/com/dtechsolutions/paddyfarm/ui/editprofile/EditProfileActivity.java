@@ -61,6 +61,7 @@ public class EditProfileActivity extends BaseActivity<EditProfileViewModel> {
 
         initialize();
         observeProfile();
+        observeUpdateResult();
     }
 
     @Override
@@ -142,11 +143,10 @@ public class EditProfileActivity extends BaseActivity<EditProfileViewModel> {
                 language
         );
         viewModel.updateUser(request);
-        observeResult();
     }
 
-    private void observeResult() {
-        viewModel.getResult().observe(this, new Observer<Resource<User>>() {
+    private void observeUpdateResult() {
+        viewModel.getUpdateResult().observe(this, new Observer<Resource<User>>() {
             @Override
             public void onChanged(Resource<User> result) {
                 if(result.isHandled()) return;
@@ -182,7 +182,7 @@ public class EditProfileActivity extends BaseActivity<EditProfileViewModel> {
 
     private void observeProfile() {
         viewModel.fetchProfile();
-        viewModel.getProfile().observe(this, new Observer<Resource<User>>() {
+        viewModel.getProfileResult().observe(this, new Observer<Resource<User>>() {
             @Override
             public void onChanged(Resource<User> result) {
                 if(result.isHandled()) return;

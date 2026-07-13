@@ -14,6 +14,7 @@ import com.dtechsolutions.paddyfarm.data.models.Message;
 import com.dtechsolutions.paddyfarm.utils.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -33,9 +34,25 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.datetimeFormatter = DateTimeFormatter.getInstance();
     }
 
+    public List<Message> getMessages() {
+        return list;
+    }
+
     public void setMessages(List<Message> list) {
         this.list = list;
         notifyDataSetChanged();
+    }
+
+    public void addNewMessage(String content, Sender sender) {
+        int id = (int)(Math.random() * 1000) + 1;
+        Message newMessage = new Message(id, content, new Date(), sender);
+        list.add(newMessage);
+        notifyDataSetChanged();
+    }
+
+    public void pop() {
+        if(list.isEmpty()) return;
+        list.remove(list.size() - 1);
     }
 
     @NonNull

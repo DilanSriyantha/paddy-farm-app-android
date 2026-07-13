@@ -59,6 +59,11 @@ public class ProfileActivity extends BaseActivity<ProfileViewModel> {
         });
 
         initialize();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         observeProfile();
     }
 
@@ -107,9 +112,7 @@ public class ProfileActivity extends BaseActivity<ProfileViewModel> {
 
     private void observeProfile() {
         viewModel.fetchProfile();
-        viewModel
-                .getProfile()
-                .observe(this, this::onProfileLoaded);
+        viewModel.getProfileResult().observe(this, this::onProfileLoaded);
     }
 
     private void updateProfileCard(User profile) {
@@ -139,11 +142,13 @@ public class ProfileActivity extends BaseActivity<ProfileViewModel> {
     private void startLoading() {
         progressbar.setVisibility(View.VISIBLE);
         container.setVisibility(View.GONE);
+        btnLogout.setVisibility(View.GONE);
     }
 
     private void stopLoading() {
         progressbar.setVisibility(View.GONE);
         container.setVisibility(View.VISIBLE);
+        btnLogout.setVisibility(View.VISIBLE);
     }
 
     private void onProfileLoaded(Resource<User> result) {

@@ -3,6 +3,7 @@ package com.dtechsolutions.paddyfarm.data.repositories;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.dtechsolutions.paddyfarm.MyApplication;
 import com.dtechsolutions.paddyfarm.data.api.ApiService;
 import com.dtechsolutions.paddyfarm.data.models.ChatDto;
 import com.dtechsolutions.paddyfarm.data.models.ChatResponse;
@@ -19,8 +20,8 @@ import retrofit2.Response;
 public class ChatbotRepository {
     private final ApiService apiService;
 
-    public ChatbotRepository(ApiService apiService) {
-        this.apiService = apiService;
+    public ChatbotRepository() {
+        this.apiService = MyApplication.getApiService();
     }
 
     public LiveData<Resource<List<Message>>> getChatHistory() {

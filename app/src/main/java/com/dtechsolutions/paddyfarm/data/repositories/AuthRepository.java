@@ -22,11 +22,11 @@ public class AuthRepository {
         apiService = MyApplication.getApiService();
     }
 
-    public LiveData<Resource<AuthResponse>> login(String email, String password) {
+    public LiveData<Resource<AuthResponse>> login(LoginRequest request) {
         MutableLiveData<Resource<AuthResponse>> result = new MutableLiveData<>();
         result.setValue(Resource.loading());
 
-        apiService.login(new LoginRequest(email, password)).enqueue(new Callback<AuthResponse>() {
+        apiService.login(request).enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
                 if(!response.isSuccessful()) {
@@ -46,19 +46,11 @@ public class AuthRepository {
         return result;
     }
 
-    public LiveData<Resource<AuthResponse>> register(
-            String name,
-            String email,
-            String phoneNumber,
-            String password,
-            PreferredLanguage preferredLanguage
-    ) {
+    public LiveData<Resource<AuthResponse>> register(RegisterRequest request) {
         MutableLiveData<Resource<AuthResponse>> result = new MutableLiveData<>();
         result.setValue(Resource.loading());
 
-        apiService.register(
-                new RegisterRequest(name, email, password, phoneNumber, preferredLanguage)
-        ).enqueue(new Callback<AuthResponse>() {
+        apiService.register(request).enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
                 if(!response.isSuccessful()) {

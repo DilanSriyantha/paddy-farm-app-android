@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ public class RecommendationsActivity extends BaseActivity<RecommendationsViewMod
     ImageButton btnBack;
     ScrollView container;
     ProgressBar progressBar;
+    LinearLayout startNewCultivationContainer;
 
     @Override
     protected Class<RecommendationsViewModel> getViewModelClass() {
@@ -69,6 +71,8 @@ public class RecommendationsActivity extends BaseActivity<RecommendationsViewMod
         container = findViewById(R.id.recommendationsContainer);
 
         progressBar = findViewById(R.id.pbRecommendations);
+
+        startNewCultivationContainer = findViewById(R.id.startNewCultivationSessionContainer);
     }
 
     private void handleBackClick(View view) {
@@ -78,6 +82,7 @@ public class RecommendationsActivity extends BaseActivity<RecommendationsViewMod
     private void startLoading() {
         progressBar.setVisibility(View.VISIBLE);
         container.setVisibility(View.GONE);
+        startNewCultivationContainer.setVisibility(View.GONE);
     }
 
     private void stopLoading() {
@@ -99,6 +104,12 @@ public class RecommendationsActivity extends BaseActivity<RecommendationsViewMod
         txtDaysGone.setText(daysGone);
     }
 
+    private void showStartNewCultivationBanner() {
+        startNewCultivationContainer.setVisibility(View.VISIBLE);
+
+        if(container.getVisibility() == View.VISIBLE) container.setVisibility(View.GONE);
+    }
+
     private void observeRecommendations() {
         viewModel.fetchRecommendations();
         viewModel.getResult().observe(this, new Observer<Resource<RecommendationSummary>>() {
@@ -110,17 +121,14 @@ public class RecommendationsActivity extends BaseActivity<RecommendationsViewMod
                         break;
 
                     case ERROR:
-                        viewModel.addAlertEvent(new AlertEvent(
-                                AlertEvent.Type.ERROR,
-                                null,
-                                result.message
-                        ));
-//                        stopLoading();
+                        stopLoading();
+                        showStartNewCultivationBanner();
                         break;
 
                     case SUCCESS:
                         populateRecommendations(result.data);
                         stopLoading();
+                        break;
                 }
             }
         });

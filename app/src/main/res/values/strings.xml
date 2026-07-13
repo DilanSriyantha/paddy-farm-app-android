@@ -166,4 +166,5 @@
     <string name="good_night">Good Night,</string>
     <string name="day">Day </string>
     <string name="thinking">Thinking…</string>
+    <string name="start_new_cultivation_session">Start a new cultivation session.</string>
 </resources>

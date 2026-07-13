@@ -86,7 +86,7 @@ public class DiseaseDetectionResultsActivity extends BaseActivity<DiseaseDetecti
 
     private void observeDiseaseDetectionResults() {
         viewModel.fetchDiseaseDetectionResults();
-        viewModel.getResults().observe(this, new Observer<Resource<List<DiseaseDetectionResult>>>() {
+        viewModel.getResultsList().observe(this, new Observer<Resource<List<DiseaseDetectionResult>>>() {
             @Override
             public void onChanged(Resource<List<DiseaseDetectionResult>> result) {
                 switch (result.status) {

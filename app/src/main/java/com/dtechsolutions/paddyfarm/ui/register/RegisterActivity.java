@@ -22,16 +22,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.dtechsolutions.paddyfarm.MyApplication;
 import com.dtechsolutions.paddyfarm.R;
 import com.dtechsolutions.paddyfarm.adapters.PreferredLanguagesArrayAdapter;
+import com.dtechsolutions.paddyfarm.data.models.AuthResponse;
 import com.dtechsolutions.paddyfarm.data.models.LanguageItem;
+import com.dtechsolutions.paddyfarm.data.models.RegisterRequest;
 import com.dtechsolutions.paddyfarm.enums.PreferredLanguage;
 import com.dtechsolutions.paddyfarm.ui.dashboard.DashboardActivity;
 import com.dtechsolutions.paddyfarm.ui.login.LoginActivity;
 import com.dtechsolutions.paddyfarm.utils.AlertEvent;
 import com.dtechsolutions.paddyfarm.utils.BaseActivity;
+import com.dtechsolutions.paddyfarm.utils.Resource;
+import com.dtechsolutions.paddyfarm.utils.TokenProvider.SharedPrefsTokenProvider;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -162,19 +168,7 @@ public class RegisterActivity extends BaseActivity<RegisterViewModel> {
             return;
         }
 
-        viewModel.register(
-                name,
-                email,
-                phone,
-                password1,
-                preferredLanguage
-        );
-    }
-
-    private void processSuccessfulRegistration() {
-        Toast.makeText(this, "Registration Successful", Toast.LENGTH_SHORT).show();
-        cleanInputs();
-        goToDashboard();
+        viewModel.register(name, email, phone, password1, preferredLanguage);
     }
 
     private void cleanInputs() {
@@ -215,29 +209,37 @@ public class RegisterActivity extends BaseActivity<RegisterViewModel> {
         pbRegisterLoading.setVisibility(View.GONE);
     }
 
+    private void storeAccessToken(AuthResponse response) {
+        SharedPrefsTokenProvider tokenProvider = (SharedPrefsTokenProvider) MyApplication.getTokenProvider();
+        tokenProvider.saveToken(response.getAccessToken());
+    }
+
     private void observeAuthResponse() {
-        viewModel.getRegisterResult()
-                .observe(this, result -> {
-                    switch (result.status) {
-                        case LOADING:
-                            startLoading();
-                            break;
+        viewModel.getRegisterResponse().observe(this, new Observer<Resource<AuthResponse>>() {
+            @Override
+            public void onChanged(Resource<AuthResponse> result) {
+                switch (result.status) {
+                    case LOADING:
+                        startLoading();
+                        break;
 
-                        case SUCCESS:
-                            cleanInputs();
-                            goToDashboard();
-                            stopLoading();
-                            break;
+                    case SUCCESS:
+                        storeAccessToken(result.getContentIfNotHandled());
+                        cleanInputs();
+                        goToDashboard();
+                        stopLoading();
+                        break;
 
-                        case ERROR:
-                            viewModel.addAlertEvent(new AlertEvent(
-                                    AlertEvent.Type.ERROR,
-                                    null,
-                                    "Failed to create a new user\n" + result.message
-                            ));
-                            stopLoading();
-                            break;
-                    }
-                });
+                    case ERROR:
+                        viewModel.addAlertEvent(new AlertEvent(
+                                AlertEvent.Type.ERROR,
+                                null,
+                                "Failed to create a new user\n" + result.message
+                        ));
+                        stopLoading();
+                        break;
+                }
+            }
+        });
     }
 }
