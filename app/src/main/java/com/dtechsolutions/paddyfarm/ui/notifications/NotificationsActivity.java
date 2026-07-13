@@ -68,9 +68,6 @@ public class NotificationsActivity extends BaseActivity<NotificationsViewModel> 
     }
 
     private void handleBackClick(View view) {
-        Intent i = new Intent(NotificationsActivity.this, DashboardActivity.class);
-        startActivity(i);
-
         finish();
     }
 

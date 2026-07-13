@@ -3,6 +3,9 @@ package com.dtechsolutions.paddyfarm.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -127,5 +130,39 @@ public class ImageLoader {
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }
+    }
+
+    public File drawableToFile(Context context, Drawable drawable) {
+        if(drawable == null) return null;
+
+        Bitmap bitmap;
+
+        if(drawable instanceof BitmapDrawable) {
+            bitmap = ((BitmapDrawable) drawable).getBitmap();
+        }else{
+            int width = drawable.getIntrinsicWidth() > 0 ? drawable.getIntrinsicWidth() : 1;
+            int height = drawable.getIntrinsicHeight() > 0 ? drawable.getIntrinsicHeight() : 1;
+
+            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+        }
+
+        File imageFile = null;
+        try{
+            File cacheDir = context.getCacheDir();
+            String fileName = String.valueOf(System.currentTimeMillis());
+            imageFile = new File(cacheDir, fileName + ".png");
+
+            FileOutputStream fos = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return imageFile;
     }
 }

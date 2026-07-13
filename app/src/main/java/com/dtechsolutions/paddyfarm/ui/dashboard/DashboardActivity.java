@@ -48,7 +48,7 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
 
     MaterialCardView btnStartCultivation, btnRecommendations, btnAiChatbot,
     btnDiseaseDetection, btnFertilizerPrices, btnProfile;
-    TextView txtGreeting, txtUsername, txtStage, txtDaysGone, txtNotificationCount;
+    TextView txtGreeting, txtUsername, txtStage, txtDaysGone, txtNotificationCount, txtTipsCardTitle;
     ImageView imgPlant;
     LinearLayout summaryContainer;
     ProgressBar pbSummary;
@@ -123,6 +123,9 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
         summaryContainer = findViewById(R.id.summaryContainer);
         imgPlant = findViewById(R.id.imgPlant);
         pbSummary = findViewById(R.id.pbSummaryCard);
+
+        txtTipsCardTitle = findViewById(R.id.txtTipsCardTitle);
+        txtTipsCardTitle.setSelected(true);
     }
 
     private void handleNotificationsClick(View view) {
@@ -168,20 +171,21 @@ public class DashboardActivity extends BaseActivity<DashboardViewModel> {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
 
         if(hour >= 4 && hour < 12) {
-            return "Good Morning,";
+            return getString(R.string.good_morning);
         }else if(hour >= 12 && hour < 17) {
-            return "Good Afternoon,";
+            return getString(R.string.good_afternoon);
         }else if(hour >= 17 && hour < 22) {
-            return "Good Evening,";
+            return getString(R.string.good_evening);
         }else{
-            return "Good Night,";
+            return getString(R.string.good_night);
         }
     }
 
     private void updateSummaryCard(RecommendationSummary summary) {
         txtStage.setText(summary.getStage().getTitle());
+        txtStage.setSelected(true);
 
-        String daysGone = "Day " + (summary.getDaysGone());
+        String daysGone = getString(R.string.day) + " " + (summary.getDaysGone());
         txtDaysGone.setText(daysGone);
     }
 

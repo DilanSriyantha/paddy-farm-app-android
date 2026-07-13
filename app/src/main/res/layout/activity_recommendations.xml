@@ -99,6 +99,7 @@
                             android:padding="16dp">
 
                             <ImageView
+                                android:id="@+id/imageView13"
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
                                 android:layout_alignParentStart="true"
@@ -106,10 +107,11 @@
                                 android:src="@drawable/leaf" />
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
+                                android:layout_toEndOf="@+id/imageView13"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -126,7 +128,14 @@
                                     android:text="@string/stage_placeholder"
                                     android:textColor="@color/primary"
                                     android:textSize="25sp"
-                                    android:textStyle="normal" />
+                                    android:textStyle="normal"
+                                    android:singleLine="true"
+                                    android:maxLines="1"
+                                    android:scrollHorizontally="true"
+                                    android:ellipsize="marquee"
+                                    android:marqueeRepeatLimit="marquee_forever"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"/>
 
                                 <Space
                                     android:layout_width="match_parent"

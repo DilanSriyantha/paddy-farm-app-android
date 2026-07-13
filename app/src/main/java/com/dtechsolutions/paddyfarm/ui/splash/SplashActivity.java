@@ -70,6 +70,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void goToDashboard() {
         Intent i = new Intent(SplashActivity.this, DashboardActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
 
         finish();
@@ -77,6 +78,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void goToLogin() {
         Intent i = new Intent(SplashActivity.this, LoginActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
 
         finish();
@@ -84,6 +86,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void goToStart() {
         Intent i = new Intent(SplashActivity.this, GetStartedActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
 
         finish();

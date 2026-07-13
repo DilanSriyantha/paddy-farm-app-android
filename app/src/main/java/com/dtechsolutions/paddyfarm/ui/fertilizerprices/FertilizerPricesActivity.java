@@ -79,9 +79,6 @@ public class FertilizerPricesActivity extends BaseActivity<FertilizerPricesViewM
     }
 
     private void handleBackClick(View view) {
-        Intent i = new Intent(FertilizerPricesActivity.this, DashboardActivity.class);
-        startActivity(i);
-
         finish();
     }
 

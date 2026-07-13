@@ -35,6 +35,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void setMessages(List<Message> list) {
         this.list = list;
+        notifyDataSetChanged();
     }
 
     @NonNull

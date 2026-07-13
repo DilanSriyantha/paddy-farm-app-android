@@ -75,7 +75,7 @@ public class NotificationsViewModel extends BaseViewModel {
             public void onChanged(Resource<BatchPayload> result) {
                 switch (result.status) {
                     case SUCCESS:
-                        fetchNotifications();
+                        Log.i(TAG, "Notifications have been marked as read.");
                         break;
 
                     case ERROR:

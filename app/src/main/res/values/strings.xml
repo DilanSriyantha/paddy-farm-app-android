@@ -95,7 +95,8 @@
     <string name="low_risk">Low Risk</string>
     <string name="medium_risk">Medium Risk</string>
     <string name="high_risk">High Risk</string>
-    <string name="detected_on">Detected on 2024/05/12</string>
+    <string name="invalid_risk_level">Invalid</string>
+    <string name="detected_on">Detected on</string>
     <string name="early_detection">Early detection, better protection</string>
     <string name="early_detection_description">Detecting diseases early helps in taking timely actions and prevents crop yield loss.</string>
     <string name="scan_now">Scan Now</string>
@@ -142,4 +143,27 @@
     <string name="notification_content">Lorem ipsum lorem ipsum</string>
     <string name="notification_datetime">2026/07/06 08:00 AM</string>
     <string name="notifications">Notifications</string>
+    <string name="disease_detection_result">Disease Detection Result</string>
+    <string name="disease_name">Disease Name</string>
+    <string name="disease_scientific_name">Disease Scientific Name</string>
+    <string name="disease_risk_level">Disease Risk Level</string>
+    <string name="close">CLOSE</string>
+    <string name="save">Save</string>
+    <string name="ok">OK</string>
+    <string name="detection_history">Detection History</string>
+    <string name="something_went_wrong">Something went wrong!</string>
+    <string name="required_information_missing">Information required are missing!</string>
+    <string name="profile_update_success">Profile updated successfully.</string>
+    <string name="id_placeholder">#01</string>
+    <string name="start_date">Start date</string>
+    <string name="status">Status</string>
+    <string name="active">Active</string>
+    <string name="completed">Completed</string>
+    <string name="paddy_variety_without_optional">Paddy variety</string>
+    <string name="good_morning">Good Morning,</string>
+    <string name="good_afternoon">Good Afternoon,</string>
+    <string name="good_evening">Good Evening,</string>
+    <string name="good_night">Good Night,</string>
+    <string name="day">Day </string>
+    <string name="thinking">Thinking…</string>
 </resources>

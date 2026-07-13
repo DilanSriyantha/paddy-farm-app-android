@@ -50,6 +50,11 @@ public abstract class BaseActivity<T extends BaseViewModel> extends AppCompatAct
                                 dialog.dismiss();
                             }
                         });
+                break;
+
+            case CUSTOM:
+                AlertManager.showCustomAlert(this, alertEvent.getView());
+                break;
         }
     }
 }

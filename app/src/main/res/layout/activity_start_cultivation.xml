@@ -92,6 +92,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/cultivation_start_date"
+                        android:textColor="@color/black"
                         android:inputType="date"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -112,6 +113,7 @@
                         android:id="@+id/autoCompleteSeedType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:focusable="false"
                         android:inputType="none"
                         android:paddingTop="18dp"
@@ -132,6 +134,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/size_in_acres"
+                        android:textColor="@color/black"
                         android:inputType="number"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -152,6 +155,7 @@
                         android:id="@+id/autoCompletePaddyVariety"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:focusable="false"
                         android:inputType="none"
                         android:paddingTop="18dp"

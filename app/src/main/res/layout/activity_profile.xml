@@ -31,7 +31,7 @@
 
     <ScrollView
         android:id="@+id/profileContainer"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -205,10 +205,13 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/optionEditProfile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="16dp"
+                        android:focusable="true"
+                        android:clickable="true">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -265,13 +268,17 @@
                         android:layout_marginBottom="8dp"
                         app:dividerThickness="1dp"
                         app:dividerInsetStart="16dp"
-                        app:dividerInsetEnd="16dp"/>
+                        app:dividerInsetEnd="16dp"
+                        app:dividerColor="@android:color/darker_gray"/>
 
                     <LinearLayout
+                        android:id="@+id/optionCultivationHistory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="16dp"
+                        android:focusable="true"
+                        android:clickable="true">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -328,7 +335,8 @@
                         android:layout_marginBottom="8dp"
                         app:dividerThickness="1dp"
                         app:dividerInsetStart="16dp"
-                        app:dividerInsetEnd="16dp"/>
+                        app:dividerInsetEnd="16dp"
+                        app:dividerColor="@android:color/darker_gray"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -391,7 +399,8 @@
                         android:layout_marginBottom="8dp"
                         app:dividerThickness="1dp"
                         app:dividerInsetStart="16dp"
-                        app:dividerInsetEnd="16dp"/>
+                        app:dividerInsetEnd="16dp"
+                        app:dividerColor="@android:color/darker_gray"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -454,7 +463,8 @@
                         android:layout_marginBottom="8dp"
                         app:dividerThickness="1dp"
                         app:dividerInsetStart="16dp"
-                        app:dividerInsetEnd="16dp"/>
+                        app:dividerInsetEnd="16dp"
+                        app:dividerColor="@android:color/darker_gray"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"

@@ -100,12 +100,13 @@
 
                     <LinearLayout
                         android:id="@+id/summaryContainer"
-                        android:visibility="gone"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:orientation="vertical">
+                        android:layout_toStartOf="@+id/imgPlant"
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -116,8 +117,15 @@
 
                         <TextView
                             android:id="@+id/txtStage"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:ellipsize="marquee"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:maxLines="1"
+                            android:scrollHorizontally="true"
+                            android:singleLine="true"
                             android:text="@string/stage_placeholder"
                             android:textColor="@color/primary"
                             android:textSize="25sp"

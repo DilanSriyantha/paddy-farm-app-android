@@ -15,7 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     private static ApiService apiService;
-    public final static String baseUrl = "http://10.0.2.2:3000/";
+//    public final static String baseUrl = "http://10.0.2.2:3000/"; // when using emulator
+    public final static String baseUrl = "https://f1d8-212-104-226-43.ngrok-free.app/"; // when using a real device
 
     public static ApiService getInstance(TokenProvider tokenProvider) {
         if (apiService == null) {
@@ -25,6 +26,7 @@ public class ApiClient {
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(new AuthInterceptor(tokenProvider))
                     .addInterceptor(logging)
+                    .writeTimeout(1000000, TimeUnit.MILLISECONDS)
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()
@@ -39,10 +41,6 @@ public class ApiClient {
         return apiService;
     }
 
-    /**
-     * Creates a specialized EventSource instance for SSE streaming.
-     * This uses an infinite read timeout and appends AuthIntercepter automatically.
-     */
     public static EventSource createSseConnection(String relativeUrl, TokenProvider tokenProvider, EventSourceListener listener) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);

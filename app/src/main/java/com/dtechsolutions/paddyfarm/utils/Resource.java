@@ -11,6 +11,8 @@ public class Resource <T>{
     public T data;
     public String message;
 
+    private boolean hasBeenHandled = false;
+
     private Resource(Status status, T data, String message) {
         this.status = status;
         this.data = data;
@@ -39,5 +41,22 @@ public class Resource <T>{
                 null,
                 null
         );
+    }
+
+    public T getContentIfNotHandled() {
+        if(hasBeenHandled) {
+            return null;
+        }else{
+            hasBeenHandled = true;
+            return data;
+        }
+    }
+
+    public boolean isHandled() {
+        return hasBeenHandled;
+    }
+
+    public void makeHandled() {
+        this.hasBeenHandled = true;
     }
 }

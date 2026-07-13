@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -19,7 +20,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dtechsolutions.paddyfarm.MyApplication;
 import com.dtechsolutions.paddyfarm.R;
 import com.dtechsolutions.paddyfarm.data.models.User;
+import com.dtechsolutions.paddyfarm.enums.PreferredLanguage;
+import com.dtechsolutions.paddyfarm.ui.cultivationhistory.CultivationHistoryActivity;
 import com.dtechsolutions.paddyfarm.ui.dashboard.DashboardActivity;
+import com.dtechsolutions.paddyfarm.ui.editprofile.EditProfileActivity;
 import com.dtechsolutions.paddyfarm.ui.login.LoginActivity;
 import com.dtechsolutions.paddyfarm.utils.AlertEvent;
 import com.dtechsolutions.paddyfarm.utils.AlertManager;
@@ -36,6 +40,7 @@ public class ProfileActivity extends BaseActivity<ProfileViewModel> {
     Button btnLogout;
     ScrollView container;
     ProgressBar progressbar;
+    LinearLayout optionEditProfile, optionCultivationHistory;
 
     @Override
     protected Class<ProfileViewModel> getViewModelClass() {
@@ -74,13 +79,26 @@ public class ProfileActivity extends BaseActivity<ProfileViewModel> {
 
         container = findViewById(R.id.profileContainer);
         progressbar = findViewById(R.id.pbProfile);
+
+        optionEditProfile = findViewById(R.id.optionEditProfile);
+        optionEditProfile.setOnClickListener(this::handleEditProfileClick);
+
+        optionCultivationHistory = findViewById(R.id.optionCultivationHistory);
+        optionCultivationHistory.setOnClickListener(this::handleCultivationHistoryClick);
     }
 
     private void handleBackClick(View view) {
-        Intent i = new Intent(ProfileActivity.this, DashboardActivity.class);
-        startActivity(i);
-
         finish();
+    }
+
+    private void handleEditProfileClick(View view) {
+        Intent i = new Intent(ProfileActivity.this, EditProfileActivity.class);
+        startActivity(i);
+    }
+
+    private void handleCultivationHistoryClick(View view) {
+        Intent i = new Intent(ProfileActivity.this, CultivationHistoryActivity.class);
+        startActivity(i);
     }
 
     private void handleLogoutClick(View view) {
@@ -98,7 +116,9 @@ public class ProfileActivity extends BaseActivity<ProfileViewModel> {
         Objects.requireNonNull(txtUserName).setText(profile.getName());
         Objects.requireNonNull(txtPhoneNumber).setText(profile.getPhoneNumber());
         Objects.requireNonNull(txtEmail).setText(profile.getEmail());
-        Objects.requireNonNull(txtPreferredLanguage).setText(profile.getPreferredLanguage().name());
+
+        String preferredLanguage = profile.getPreferredLanguage() == PreferredLanguage.ENGLISH ? "English" : "සිංහල (Sinhala)";
+        Objects.requireNonNull(txtPreferredLanguage).setText(preferredLanguage);
     }
 
     private void logout() {
@@ -110,8 +130,9 @@ public class ProfileActivity extends BaseActivity<ProfileViewModel> {
 
     private void goToLogin() {
         Intent i = new Intent(ProfileActivity.this, LoginActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
-
+        
         finish();
     }
 

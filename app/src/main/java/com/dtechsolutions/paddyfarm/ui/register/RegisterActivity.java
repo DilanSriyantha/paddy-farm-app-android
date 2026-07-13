@@ -8,6 +8,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,6 +25,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dtechsolutions.paddyfarm.R;
+import com.dtechsolutions.paddyfarm.adapters.PreferredLanguagesArrayAdapter;
+import com.dtechsolutions.paddyfarm.data.models.LanguageItem;
 import com.dtechsolutions.paddyfarm.enums.PreferredLanguage;
 import com.dtechsolutions.paddyfarm.ui.dashboard.DashboardActivity;
 import com.dtechsolutions.paddyfarm.ui.login.LoginActivity;
@@ -32,13 +35,14 @@ import com.dtechsolutions.paddyfarm.utils.BaseActivity;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class RegisterActivity extends BaseActivity<RegisterViewModel> {
 
-    TextView lblLoginRedirect;
+    TextView lblLoginRedirect, txtRegisterTitle;
     TextInputEditText txtName, txtEmail, txtPhoneNumber, txtPassword, txtConfirmPassword;
     MaterialAutoCompleteTextView autoCompletePreferredLanguage;
     Button btnRegister;
@@ -70,6 +74,9 @@ public class RegisterActivity extends BaseActivity<RegisterViewModel> {
         txtPassword = findViewById(R.id.txtPassword);
         txtConfirmPassword = findViewById(R.id.txtConfirmPassword);
 
+        txtRegisterTitle = findViewById(R.id.textView1);
+        txtRegisterTitle.setSelected(true);
+
         pbRegisterLoading = findViewById(R.id.pbRegisterLoading);
 
         btnRegister = findViewById(R.id.btnRegister);
@@ -82,17 +89,15 @@ public class RegisterActivity extends BaseActivity<RegisterViewModel> {
     }
 
     private void initializeAutoCompletePreferredLanguage() {
-        List<String> list = Arrays.asList("English", "සිංහල (Sinhala)");
+        List<LanguageItem> list = new ArrayList<>();
+        list.add(new LanguageItem(PreferredLanguage.ENGLISH, "English"));
+        list.add(new LanguageItem(PreferredLanguage.SINHALA, "සිංහල (Sinhala)"));
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                com.google.android.material.R.layout.select_dialog_item_material,
-                list
-        );
+        PreferredLanguagesArrayAdapter adapter = new PreferredLanguagesArrayAdapter(this, list);
 
         autoCompletePreferredLanguage = findViewById(R.id.autoCompletePreferredLanguage);
         autoCompletePreferredLanguage.setAdapter(adapter);
-        autoCompletePreferredLanguage.setText(list.get(0), false);
+        autoCompletePreferredLanguage.setText(list.get(0).getCaption(), false);
     }
 
     private void initializeLoginRedirect() {
@@ -129,9 +134,6 @@ public class RegisterActivity extends BaseActivity<RegisterViewModel> {
     }
 
     private void redirectToLogin() {
-        Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(i);
-
         finish();
     }
 
@@ -145,7 +147,7 @@ public class RegisterActivity extends BaseActivity<RegisterViewModel> {
         String phone = Objects.requireNonNull(txtPhoneNumber.getText()).toString();
         String password1 = Objects.requireNonNull(txtPassword.getText()).toString();
         String password2 = Objects.requireNonNull(txtConfirmPassword.getText()).toString();
-        PreferredLanguage preferredLanguage = autoCompletePreferredLanguage.getText().toString().equals("English") ? PreferredLanguage.ENGLISH : PreferredLanguage.SINHALA;
+        PreferredLanguage preferredLanguage = ((PreferredLanguagesArrayAdapter)autoCompletePreferredLanguage.getAdapter()).getPreferredLanguage(autoCompletePreferredLanguage.getText().toString());
 
         if(name.isEmpty() ||
         email.isEmpty() ||
@@ -185,6 +187,7 @@ public class RegisterActivity extends BaseActivity<RegisterViewModel> {
 
     private void goToDashboard() {
         Intent i = new Intent(RegisterActivity.this, DashboardActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
 
         finish();

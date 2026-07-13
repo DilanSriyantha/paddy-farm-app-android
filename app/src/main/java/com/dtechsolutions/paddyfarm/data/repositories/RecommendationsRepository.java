@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.dtechsolutions.paddyfarm.MyApplication;
 import com.dtechsolutions.paddyfarm.data.api.ApiService;
 import com.dtechsolutions.paddyfarm.data.models.RecommendationSummary;
+import com.dtechsolutions.paddyfarm.utils.LanguageManager;
 import com.dtechsolutions.paddyfarm.utils.Resource;
 
 import retrofit2.Call;
@@ -23,7 +24,9 @@ public class RecommendationsRepository {
         MutableLiveData<Resource<RecommendationSummary>> result = new MutableLiveData<>();
         result.setValue(Resource.loading());
 
-        apiService.getRecommendationsForCurrentSession("en").enqueue(new Callback<RecommendationSummary>() {
+        String language = LanguageManager.getCurrentLanguage();
+
+        apiService.getRecommendationsForCurrentSession(language).enqueue(new Callback<RecommendationSummary>() {
             @Override
             public void onResponse(Call<RecommendationSummary> call, Response<RecommendationSummary> response) {
                 if(!response.isSuccessful()) {

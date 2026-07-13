@@ -72,9 +72,6 @@ public class RecommendationsActivity extends BaseActivity<RecommendationsViewMod
     }
 
     private void handleBackClick(View view) {
-        Intent i = new Intent(RecommendationsActivity.this, DashboardActivity.class);
-        startActivity(i);
-
         finish();
     }
 
@@ -96,8 +93,9 @@ public class RecommendationsActivity extends BaseActivity<RecommendationsViewMod
         txtNextStagePrediction.setText(recommendationSummary.getRecommendation().getNextStagePrediction());
 
         txtCurrentStage.setText(recommendationSummary.getStage().getTitle());
+        txtCurrentStage.setSelected(true);
 
-        String daysGone = "Day %d".formatted(recommendationSummary.getDaysGone());
+        String daysGone = getString(R.string.day) + " " + recommendationSummary.getDaysGone();
         txtDaysGone.setText(daysGone);
     }
 

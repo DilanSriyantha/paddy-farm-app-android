@@ -8,13 +8,15 @@ public class Cultivation {
     private String seedType;
     private float sizeInAcres;
     private String paddyVariety;
+    private CultivationStatus status;
 
-    public Cultivation(int id, Date startDate, String seedType, float sizeInAcres, String paddyVariety) {
+    public Cultivation(int id, Date startDate, String seedType, float sizeInAcres, String paddyVariety, CultivationStatus status) {
         this.id = id;
         this.startDate = startDate;
         this.seedType = seedType;
         this.sizeInAcres = sizeInAcres;
         this.paddyVariety = paddyVariety;
+        this.status = status;
     }
 
     public int getId() {
@@ -55,5 +57,13 @@ public class Cultivation {
 
     public void setPaddyVariety(String paddyVariety) {
         this.paddyVariety = paddyVariety;
+    }
+
+    public CultivationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CultivationStatus status) {
+        this.status = status;
     }
 }

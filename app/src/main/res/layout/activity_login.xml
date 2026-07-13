@@ -154,6 +154,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/email"
+                        android:textColor="@color/black"
                         android:inputType="textEmailAddress"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -173,6 +174,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/password"
+                        android:textColor="@color/black"
                         android:inputType="textPassword"
                         android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -200,7 +202,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:visibility="gone"
-                        android:indeterminateTint="@android:color/white"
+                        android:indeterminateTint="@color/primary"
                         app:layout_constraintTop_toTopOf="@id/btnLogin"
                         app:layout_constraintBottom_toBottomOf="@id/btnLogin"
                         app:layout_constraintLeft_toLeftOf="@id/btnLogin"

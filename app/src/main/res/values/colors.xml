@@ -6,10 +6,17 @@
     <color name="primary_light">#80297701</color>
     <color name="primary_surface">#33297701</color>
     <color name="primary_surface_light">#1A297701</color>
+    <color name="primary_badge">#33297701</color>
     <color name="red">#FF3333</color>
     <color name="gray_surface">#f5f5f5</color>
     <color name="gray_stroke">#e5e5e5</color>
     <color name="divider_color">#cccccc</color>
     <color name="dark_gray">#1a1a1a</color>
     <color name="gray">#ececec</color>
+    <color name="gray_50">#80ECECEC</color>
+    <color name="gray_25">#40ECECEC</color>
+    <color name="warning">#FF8C22</color>
+    <color name="warning_badge">#33FF9622</color>
+    <color name="error">#FF3333</color>
+    <color name="error_badge">#33FF3333</color>
 </resources>

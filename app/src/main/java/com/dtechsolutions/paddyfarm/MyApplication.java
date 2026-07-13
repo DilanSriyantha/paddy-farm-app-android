@@ -2,6 +2,8 @@ package com.dtechsolutions.paddyfarm;
 
 import android.app.Application;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.dtechsolutions.paddyfarm.data.api.ApiClient;
 import com.dtechsolutions.paddyfarm.data.api.ApiService;
 import com.dtechsolutions.paddyfarm.utils.TokenProvider.SharedPrefsTokenProvider;
@@ -14,6 +16,8 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         tokenProvider = new SharedPrefsTokenProvider(this);
         apiService = ApiClient.getInstance(tokenProvider);

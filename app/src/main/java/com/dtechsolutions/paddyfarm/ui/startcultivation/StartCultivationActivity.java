@@ -89,9 +89,6 @@ public class StartCultivationActivity extends BaseActivity<StartCultivationViewM
     }
 
     private void handleBackClick(View view) {
-        Intent i = new Intent(StartCultivationActivity.this, DashboardActivity.class);
-        startActivity(i);
-
         finish();
     }
 
@@ -247,6 +244,8 @@ public class StartCultivationActivity extends BaseActivity<StartCultivationViewM
         viewModel.getCreateResult().observe(this, new Observer<Resource<Cultivation>>() {
             @Override
             public void onChanged(Resource<Cultivation> result) {
+                if(result.isHandled()) return;
+
                 switch (result.status) {
                     case LOADING:
                         startLoading();
@@ -267,6 +266,7 @@ public class StartCultivationActivity extends BaseActivity<StartCultivationViewM
                                 "Success",
                                 "Cultivation session created successfully."
                         ));
+                        result.makeHandled();
                         stopLoading();
                         clear();
                         break;
